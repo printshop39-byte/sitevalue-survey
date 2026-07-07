@@ -32,3 +32,6 @@ next-env.d.ts
 /*.png
 /*.jpg
 /*.jpeg
+
+# local helper scripts (not part of the app)
+/push-to-github.bat
