@@ -8,7 +8,7 @@ import { t } from "@/lib/i18n";
 export function PrintToolbar({ backHref }: { backHref: string }) {
   return (
     <div className="no-print sticky top-0 z-10 border-b bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3">
         <Button variant="ghost" size="sm" asChild>
           <Link href={backHref}>
             <ArrowLeft className="h-4 w-4" /> {t.print.back}

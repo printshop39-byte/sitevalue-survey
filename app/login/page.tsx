@@ -101,7 +101,7 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  defaultValue="elena.marsh@sitevalue.io"
+                  defaultValue="aarti.deshmukh@sahyadrisurvey.in"
                   className="pl-9"
                   required
                 />

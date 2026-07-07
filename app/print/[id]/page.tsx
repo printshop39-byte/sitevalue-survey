@@ -38,7 +38,7 @@ export default async function PrintPage({
       <PrintToolbar backHref={`/sites/${site.id}`} />
 
       <div className="mx-auto max-w-4xl px-4 py-8">
-        <div className="print-page mx-auto rounded-lg border bg-white p-10 text-[13px] leading-relaxed text-slate-800 shadow-lg print:p-0 print:shadow-none">
+        <div className="print-page mx-auto rounded-lg border bg-white p-5 text-[13px] leading-relaxed text-slate-800 shadow-lg sm:p-10 print:p-0 print:shadow-none">
           {/* Letterhead */}
           <div className="flex items-start justify-between border-b-2 border-slate-800 pb-5">
             <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ export default async function PrintPage({
           </div>
 
           {/* Headline valuation */}
-          <div className="grid grid-cols-3 gap-4 rounded-lg bg-slate-50 p-5">
+          <div className="grid grid-cols-1 gap-3 rounded-lg bg-slate-50 p-4 sm:grid-cols-3 sm:gap-4 sm:p-5">
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
                 {t.print.assessedValue}
@@ -109,7 +109,7 @@ export default async function PrintPage({
               <tbody>
                 {keyFacts.map(([k, v], i) => (
                   <tr key={k} className={i % 2 ? "bg-slate-50" : ""}>
-                    <td className="w-56 py-1.5 pl-2 font-medium text-slate-500">
+                    <td className="w-32 py-1.5 pl-2 align-top font-medium text-slate-500 sm:w-56">
                       {k}
                     </td>
                     <td className="py-1.5 text-slate-900">{v}</td>
