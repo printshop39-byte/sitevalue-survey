@@ -1,0 +1,288 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import {
+  Building2,
+  Download,
+  LayoutGrid,
+  List,
+  MapPin,
+  Plus,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
+import { PageHeader } from "@/components/page-header";
+import { StatusBadge, ConditionBadge, WorkflowBadge } from "@/components/status-badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { sites } from "@/lib/mock-data";
+import type { SiteStatus, SiteType } from "@/lib/types";
+import { cn, formatCurrency, formatNumber, initials } from "@/lib/utils";
+
+const statuses: (SiteStatus | "All")[] = [
+  "All",
+  "Approved",
+  "In Review",
+  "Draft",
+  "Archived",
+];
+const types: (SiteType | "All")[] = [
+  "All",
+  "Commercial",
+  "Industrial",
+  "Residential",
+  "Mixed Use",
+  "Land",
+];
+
+export default function SitesPage() {
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState<(typeof statuses)[number]>("All");
+  const [type, setType] = useState<(typeof types)[number]>("All");
+  const [view, setView] = useState<"table" | "grid">("table");
+
+  const filtered = useMemo(() => {
+    return sites.filter((s) => {
+      const matchesQuery =
+        !query ||
+        [s.name, s.reference, s.city, s.address, s.surveyor.name]
+          .join(" ")
+          .toLowerCase()
+          .includes(query.toLowerCase());
+      const matchesStatus = status === "All" || s.status === status;
+      const matchesType = type === "All" || s.type === type;
+      return matchesQuery && matchesStatus && matchesType;
+    });
+  }, [query, status, type]);
+
+  return (
+    <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
+      <PageHeader
+        title="Sites"
+        description={`${sites.length} sites across the portfolio · ${formatCurrency(
+          sites.reduce((s, x) => s + x.valuation, 0),
+          true
+        )} total value`}
+        crumbs={[{ label: "Workspace", href: "/dashboard" }, { label: "Sites" }]}
+        actions={
+          <>
+            <Button variant="outline">
+              <Download className="h-4 w-4" /> Export
+            </Button>
+            <Button>
+              <Plus className="h-4 w-4" /> New Survey
+            </Button>
+          </>
+        }
+      />
+
+      {/* Filters */}
+      <Card>
+        <CardContent className="flex flex-col gap-4 p-4 lg:flex-row lg:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, reference, city or surveyor…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-lg border bg-muted/40 p-1">
+              <SlidersHorizontal className="ml-1.5 h-3.5 w-3.5 text-muted-foreground" />
+              {statuses.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setStatus(s)}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-xs font-medium transition-colors",
+                    status === s
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-1 rounded-lg border bg-muted/40 p-1">
+              <button
+                onClick={() => setView("table")}
+                className={cn(
+                  "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
+                  view === "table"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground"
+                )}
+                aria-label="Table view"
+              >
+                <List className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setView("grid")}
+                className={cn(
+                  "flex h-7 w-7 items-center justify-center rounded-md transition-colors",
+                  view === "grid"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground"
+                )}
+                aria-label="Grid view"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Type chips */}
+      <div className="flex flex-wrap gap-2">
+        {types.map((t) => (
+          <button
+            key={t}
+            onClick={() => setType(t)}
+            className={cn(
+              "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+              type === t
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:bg-muted"
+            )}
+          >
+            {t}
+          </button>
+        ))}
+        <span className="ml-auto self-center text-sm text-muted-foreground">
+          {filtered.length} result{filtered.length !== 1 && "s"}
+        </span>
+      </div>
+
+      {/* Results */}
+      {view === "table" ? (
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Site</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Stage</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Condition</TableHead>
+                <TableHead className="text-right">Area</TableHead>
+                <TableHead className="text-right">Valuation</TableHead>
+                <TableHead>Surveyor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map((site) => (
+                <TableRow key={site.id} className="cursor-pointer">
+                  <TableCell>
+                    <Link href={`/sites/${site.id}`} className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Building2 className="h-4.5 w-4.5" />
+                      </div>
+                      <div>
+                        <p className="font-medium leading-tight">{site.name}</p>
+                        <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3" /> {site.reference} · {site.city}
+                        </p>
+                      </div>
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary">{site.type}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <WorkflowBadge stage={site.workflowStage} />
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={site.status} />
+                  </TableCell>
+                  <TableCell>
+                    <ConditionBadge condition={site.condition} />
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums text-muted-foreground">
+                    {formatNumber(site.areaSqFt, true)} sq ft
+                  </TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">
+                    {formatCurrency(site.valuation, true)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-7 w-7">
+                        <AvatarFallback className="bg-secondary text-[10px]">
+                          {initials(site.surveyor.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm text-muted-foreground">
+                        {site.surveyor.name.split(" ")[0]}
+                      </span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {filtered.length === 0 && (
+            <div className="py-16 text-center text-sm text-muted-foreground">
+              No sites match your filters.
+            </div>
+          )}
+        </Card>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((site) => (
+            <Link key={site.id} href={`/sites/${site.id}`}>
+              <Card className="group overflow-hidden transition-shadow hover:shadow-md">
+                <div className="relative h-40 overflow-hidden bg-muted">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={site.coverImage}
+                    alt={site.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute left-3 top-3">
+                    <StatusBadge status={site.status} />
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 px-2 py-1 text-xs font-medium text-white backdrop-blur">
+                    {formatCurrency(site.valuation, true)}
+                  </div>
+                </div>
+                <CardContent className="space-y-3 p-4">
+                  <div>
+                    <p className="font-semibold leading-tight">{site.name}</p>
+                    <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <MapPin className="h-3 w-3" /> {site.reference} · {site.city}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">{site.type}</Badge>
+                    <ConditionBadge condition={site.condition} />
+                  </div>
+                  <div className="flex items-center justify-between border-t pt-3 text-xs text-muted-foreground">
+                    <span>{formatNumber(site.areaSqFt, true)} sq ft</span>
+                    <span>{formatCurrency(site.valuationPerSqFt)}/sq ft</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
