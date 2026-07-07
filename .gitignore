@@ -26,6 +26,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-*.png
-*.jpg
-*.jpeg
+
+# stray design/reference images in project ROOT only
+# (public/ images and asset folders are still tracked)
+/*.png
+/*.jpg
+/*.jpeg
