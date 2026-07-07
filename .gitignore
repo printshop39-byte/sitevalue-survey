@@ -35,3 +35,6 @@ next-env.d.ts
 
 # local helper scripts (not part of the app)
 /push-to-github.bat
+
+# local editor/tool config
+.claude/
