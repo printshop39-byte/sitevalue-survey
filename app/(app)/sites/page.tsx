@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { sites } from "@/lib/mock-data";
 import type { SiteStatus, SiteType } from "@/lib/types";
 import { cn, formatCurrency, formatNumber, initials } from "@/lib/utils";
+import { t, tStatus, tType } from "@/lib/i18n";
 
 const statuses: (SiteStatus | "All")[] = [
   "All",
@@ -71,19 +72,19 @@ export default function SitesPage() {
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Sites"
-        description={`${sites.length} sites across the portfolio · ${formatCurrency(
+        title={t.sites.title}
+        description={`पोर्टफोलिओमध्ये ${sites.length} साइट्स · ${formatCurrency(
           sites.reduce((s, x) => s + x.valuation, 0),
           true
-        )} total value`}
-        crumbs={[{ label: "Workspace", href: "/dashboard" }, { label: "Sites" }]}
+        )} एकूण मूल्य`}
+        crumbs={[{ label: t.brand.workspace, href: "/dashboard" }, { label: t.sites.title }]}
         actions={
           <>
             <Button variant="outline">
-              <Download className="h-4 w-4" /> Export
+              <Download className="h-4 w-4" /> {t.common.export}
             </Button>
             <Button>
-              <Plus className="h-4 w-4" /> New Survey
+              <Plus className="h-4 w-4" /> {t.common.newSurvey}
             </Button>
           </>
         }
@@ -95,7 +96,7 @@ export default function SitesPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by name, reference, city or surveyor…"
+              placeholder={t.sites.searchPlaceholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-9"
@@ -116,7 +117,7 @@ export default function SitesPage() {
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  {s}
+                  {s === "All" ? t.common.all : tStatus[s]}
                 </button>
               ))}
             </div>
@@ -153,22 +154,22 @@ export default function SitesPage() {
 
       {/* Type chips */}
       <div className="flex flex-wrap gap-2">
-        {types.map((t) => (
+        {types.map((ty) => (
           <button
-            key={t}
-            onClick={() => setType(t)}
+            key={ty}
+            onClick={() => setType(ty)}
             className={cn(
               "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-              type === t
+              type === ty
                 ? "border-primary bg-primary/10 text-primary"
                 : "border-border text-muted-foreground hover:bg-muted"
             )}
           >
-            {t}
+            {ty === "All" ? t.common.all : tType[ty]}
           </button>
         ))}
         <span className="ml-auto self-center text-sm text-muted-foreground">
-          {filtered.length} result{filtered.length !== 1 && "s"}
+          {filtered.length} निकाल
         </span>
       </div>
 
@@ -178,14 +179,14 @@ export default function SitesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Site</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Stage</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Condition</TableHead>
-                <TableHead className="text-right">Area</TableHead>
-                <TableHead className="text-right">Valuation</TableHead>
-                <TableHead>Surveyor</TableHead>
+                <TableHead>{t.sites.colSite}</TableHead>
+                <TableHead>{t.sites.colType}</TableHead>
+                <TableHead>{t.sites.colStage}</TableHead>
+                <TableHead>{t.sites.colStatus}</TableHead>
+                <TableHead>{t.sites.colCondition}</TableHead>
+                <TableHead className="text-right">{t.sites.colArea}</TableHead>
+                <TableHead className="text-right">{t.sites.colValuation}</TableHead>
+                <TableHead>{t.sites.colSurveyor}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -205,7 +206,7 @@ export default function SitesPage() {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{site.type}</Badge>
+                    <Badge variant="secondary">{tType[site.type]}</Badge>
                   </TableCell>
                   <TableCell>
                     <WorkflowBadge stage={site.workflowStage} />
@@ -217,7 +218,7 @@ export default function SitesPage() {
                     <ConditionBadge condition={site.condition} />
                   </TableCell>
                   <TableCell className="text-right tabular-nums text-muted-foreground">
-                    {formatNumber(site.areaSqFt, true)} sq ft
+                    {formatNumber(site.areaSqFt, true)} {t.sites.sqft}
                   </TableCell>
                   <TableCell className="text-right font-semibold tabular-nums">
                     {formatCurrency(site.valuation, true)}
@@ -240,7 +241,7 @@ export default function SitesPage() {
           </Table>
           {filtered.length === 0 && (
             <div className="py-16 text-center text-sm text-muted-foreground">
-              No sites match your filters.
+              {t.sites.noResults}
             </div>
           )}
         </Card>
@@ -271,12 +272,12 @@ export default function SitesPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary">{site.type}</Badge>
+                    <Badge variant="secondary">{tType[site.type]}</Badge>
                     <ConditionBadge condition={site.condition} />
                   </div>
                   <div className="flex items-center justify-between border-t pt-3 text-xs text-muted-foreground">
-                    <span>{formatNumber(site.areaSqFt, true)} sq ft</span>
-                    <span>{formatCurrency(site.valuationPerSqFt)}/sq ft</span>
+                    <span>{formatNumber(site.areaSqFt, true)} {t.sites.sqft}</span>
+                    <span>{formatCurrency(site.valuationPerSqFt)}/{t.sites.sqft}</span>
                   </div>
                 </CardContent>
               </Card>

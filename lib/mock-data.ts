@@ -169,11 +169,11 @@ function breakdownFor(seed: SiteSeed) {
   const external = Math.round(seed.valuation * 0.08);
   const contingency = seed.valuation - land - structure - services - external;
   return [
-    { label: "Land Value", amount: land },
-    { label: "Structure & Envelope", amount: structure },
-    { label: "Building Services (MEP)", amount: services },
-    { label: "External Works", amount: external },
-    { label: "Contingency & Fees", amount: contingency },
+    { label: "जमीन मूल्य", amount: land },
+    { label: "संरचना व आवरण", amount: structure },
+    { label: "इमारत सेवा (MEP)", amount: services },
+    { label: "बाह्य कामे", amount: external },
+    { label: "आकस्मिकता व शुल्क", amount: contingency },
   ];
 }
 
@@ -181,12 +181,12 @@ function inspectionFor(seed: SiteSeed) {
   const base = seed.condition;
   const step = (c: string): Site["condition"] => c as Site["condition"];
   return [
-    { category: "Structure & Frame", condition: step(base), notes: "Primary structure sound; no significant movement recorded." },
-    { category: "Roof & Waterproofing", condition: seed.condition === "Excellent" ? "Good" : seed.condition, notes: "Localised repairs recommended within 24 months." },
-    { category: "External Envelope", condition: step(base), notes: "Cladding and plaster in serviceable condition." },
-    { category: "Mechanical & Electrical", condition: seed.condition === "Poor" ? "Fair" : "Good", notes: "Plant operational; routine servicing up to date." },
-    { category: "Site & Externals", condition: "Good", notes: "Compound, drainage and hardstanding functioning adequately." },
-    { category: "Records & Compliance", condition: seed.status === "Archived" ? "Poor" : "Good", notes: "7/12, property card and NA order reviewed against current position." },
+    { category: "संरचना व सांगाडा", condition: step(base), notes: "मुख्य संरचना भक्कम; लक्षणीय हालचाल आढळली नाही." },
+    { category: "छत व जलरोधन", condition: seed.condition === "Excellent" ? "Good" : seed.condition, notes: "२४ महिन्यांत स्थानिक दुरुस्ती सुचवली आहे." },
+    { category: "बाह्य आवरण", condition: step(base), notes: "क्लॅडिंग व प्लास्टर वापरण्यायोग्य स्थितीत." },
+    { category: "यांत्रिक व विद्युत", condition: seed.condition === "Poor" ? "Fair" : "Good", notes: "यंत्रणा कार्यरत; नियमित देखभाल अद्ययावत." },
+    { category: "जागा व बाह्य भाग", condition: "Good", notes: "आवार, निचरा व हार्डस्टँडिंग योग्यरित्या कार्यरत." },
+    { category: "नोंदी व अनुपालन", condition: seed.status === "Archived" ? "Poor" : "Good", notes: "७/१२, प्रॉपर्टी कार्ड व NA आदेश सद्यस्थितीनुसार तपासले." },
   ] as Site["inspection"];
 }
 
@@ -275,12 +275,12 @@ export function getSite(id: string): Site | undefined {
 }
 
 export const activity: ActivityEvent[] = [
-  { id: "a1", actor: "Snehal Patil", action: "updated the valuation for", target: "Hinjawadi IT Commercial Tower", time: "2h ago", type: "updated" },
-  { id: "a2", actor: "Aarti Deshmukh", action: "approved", target: "Chakan Logistics Park", time: "5h ago", type: "approved" },
-  { id: "a3", actor: "Ganesh Pawar", action: "uploaded 8 photos to", target: "Wagholi Mixed-Use Township", time: "Yesterday", type: "upload" },
-  { id: "a4", actor: "Rohan Kulkarni", action: "flagged a structural defect on", target: "Waluj MIDC Industrial Estate", time: "Yesterday", type: "comment" },
-  { id: "a5", actor: "Snehal Patil", action: "created a new survey for", target: "Nashik Wine Park Commercial", time: "2 days ago", type: "created" },
-  { id: "a6", actor: "Aarti Deshmukh", action: "requested review on", target: "Nashik Wine Park Commercial", time: "3 days ago", type: "comment" },
+  { id: "a1", actor: "Snehal Patil", action: "ने मूल्यांकन अद्यतनित केले —", target: "Hinjawadi IT Commercial Tower", time: "२ तासांपूर्वी", type: "updated" },
+  { id: "a2", actor: "Aarti Deshmukh", action: "ने मंजूर केले —", target: "Chakan Logistics Park", time: "५ तासांपूर्वी", type: "approved" },
+  { id: "a3", actor: "Ganesh Pawar", action: "ने ८ फोटो अपलोड केले —", target: "Wagholi Mixed-Use Township", time: "काल", type: "upload" },
+  { id: "a4", actor: "Rohan Kulkarni", action: "ने संरचनात्मक दोष नोंदवला —", target: "Waluj MIDC Industrial Estate", time: "काल", type: "comment" },
+  { id: "a5", actor: "Snehal Patil", action: "ने नवीन सर्वेक्षण तयार केले —", target: "Nashik Wine Park Commercial", time: "२ दिवसांपूर्वी", type: "created" },
+  { id: "a6", actor: "Aarti Deshmukh", action: "ने पुनरावलोकनाची विनंती केली —", target: "Nashik Wine Park Commercial", time: "३ दिवसांपूर्वी", type: "comment" },
 ];
 
 // ---- Dashboard aggregates -------------------------------------------------

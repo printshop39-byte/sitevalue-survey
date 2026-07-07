@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import type { TimelineStep } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export function SiteTimeline({ steps }: { steps: TimelineStep[] }) {
   const activeIdx = steps.findIndex((s) => !s.done);
@@ -43,14 +44,14 @@ export function SiteTimeline({ steps }: { steps: TimelineStep[] }) {
                   step.done || isActive ? "text-foreground" : "text-muted-foreground"
                 )}
               >
-                {step.label}
+                {t.timeline.steps[step.key] ?? step.label}
               </p>
               <p className="text-xs text-muted-foreground">
                 {step.done && step.date
                   ? formatDate(step.date)
                   : isActive
-                  ? "In progress"
-                  : "Pending"}
+                  ? t.timeline.inProgress
+                  : t.timeline.pending}
               </p>
             </div>
           </li>

@@ -1,4 +1,6 @@
 import { cn, formatCurrency } from "@/lib/utils";
+import { t, tStatus, tType } from "@/lib/i18n";
+import type { SiteStatus, SiteType } from "@/lib/types";
 
 const PALETTE = [
   "hsl(217 91% 42%)",
@@ -21,7 +23,7 @@ export function ValuationBars({
       {data.map((d, i) => (
         <div key={d.label} className="space-y-1.5">
           <div className="flex items-center justify-between text-sm">
-            <span className="font-medium">{d.label}</span>
+            <span className="font-medium">{tType[d.label as SiteType] ?? d.label}</span>
             <span className="tabular-nums text-muted-foreground">
               {formatCurrency(d.value, true)}
             </span>
@@ -87,7 +89,7 @@ export function StatusDonut({
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-2xl font-semibold">{total}</span>
-          <span className="text-xs text-muted-foreground">Total sites</span>
+          <span className="text-xs text-muted-foreground">{t.dashboard.totalSites}</span>
         </div>
       </div>
       <div className="grid w-full gap-2.5 sm:w-auto">
@@ -98,7 +100,7 @@ export function StatusDonut({
                 className="h-2.5 w-2.5 rounded-sm"
                 style={{ backgroundColor: colors[d.label] ?? "hsl(217 91% 42%)" }}
               />
-              {d.label}
+              {tStatus[d.label as SiteStatus] ?? d.label}
             </span>
             <span className="font-semibold tabular-nums">{d.value}</span>
           </div>

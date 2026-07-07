@@ -39,6 +39,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency, formatDate, formatNumber, initials } from "@/lib/utils";
+import { t, tType } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return sites.map((s) => ({ id: s.id }));
@@ -54,16 +55,16 @@ export default async function SiteDetailPage({
   if (!site) notFound();
 
   const facts = [
-    { icon: Building, label: "Asset type", value: site.type },
-    { icon: Ruler, label: "Floor area", value: `${formatNumber(site.areaSqFt)} sq ft` },
-    { icon: Layers, label: "Plot size", value: site.plotSize },
+    { icon: Building, label: t.detail.assetType, value: tType[site.type] },
+    { icon: Ruler, label: t.detail.floorArea, value: `${formatNumber(site.areaSqFt)} ${t.sites.sqft}` },
+    { icon: Layers, label: t.detail.plotSize, value: site.plotSize },
     {
       icon: CalendarDays,
-      label: "Year built",
-      value: site.yearBuilt === 0 ? "Undeveloped" : String(site.yearBuilt),
+      label: t.detail.yearBuilt,
+      value: site.yearBuilt === 0 ? t.detail.undeveloped : String(site.yearBuilt),
     },
-    { icon: MapPin, label: "Region", value: site.region },
-    { icon: Landmark, label: "£ / sq ft", value: formatCurrency(site.valuationPerSqFt) },
+    { icon: MapPin, label: t.detail.region, value: site.region },
+    { icon: Landmark, label: t.detail.perSqFt, value: formatCurrency(site.valuationPerSqFt) },
   ];
 
   return (
@@ -71,7 +72,7 @@ export default async function SiteDetailPage({
       <PageHeader
         title={site.name}
         crumbs={[
-          { label: "Sites", href: "/sites" },
+          { label: t.nav.sites, href: "/sites" },
           { label: site.reference },
         ]}
       />
@@ -100,7 +101,7 @@ export default async function SiteDetailPage({
         <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Survey Summary</CardTitle>
+              <CardTitle>{t.detail.surveySummary}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm leading-relaxed text-muted-foreground">
@@ -108,7 +109,7 @@ export default async function SiteDetailPage({
               </p>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium">Survey completion</span>
+                  <span className="font-medium">{t.detail.surveyCompletion}</span>
                   <span className="text-muted-foreground">{site.progress}%</span>
                 </div>
                 <Progress value={site.progress} />
@@ -119,10 +120,8 @@ export default async function SiteDetailPage({
           {/* Workflow timeline */}
           <Card>
             <CardHeader>
-              <CardTitle>Survey Workflow</CardTitle>
-              <CardDescription>
-                Progress of this site through the survey lifecycle
-              </CardDescription>
+              <CardTitle>{t.detail.workflowTitle}</CardTitle>
+              <CardDescription>{t.detail.workflowSub}</CardDescription>
             </CardHeader>
             <CardContent>
               <SiteTimeline steps={site.timeline} />
@@ -132,10 +131,8 @@ export default async function SiteDetailPage({
           {/* Valuation breakdown */}
           <Card>
             <CardHeader>
-              <CardTitle>Valuation Breakdown</CardTitle>
-              <CardDescription>
-                Component build-up of the assessed value
-              </CardDescription>
+              <CardTitle>{t.detail.valBreakdown}</CardTitle>
+              <CardDescription>{t.detail.valBreakdownSub}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -156,7 +153,7 @@ export default async function SiteDetailPage({
                 })}
               </div>
               <div className="mt-5 flex items-center justify-between border-t pt-4">
-                <span className="font-semibold">Total assessed value</span>
+                <span className="font-semibold">{t.detail.totalAssessed}</span>
                 <span className="text-lg font-semibold">
                   {formatCurrency(site.valuation)}
                 </span>
@@ -167,18 +164,16 @@ export default async function SiteDetailPage({
           {/* Inspection findings */}
           <Card>
             <CardHeader>
-              <CardTitle>Inspection Findings</CardTitle>
-              <CardDescription>
-                Element-by-element condition assessment
-              </CardDescription>
+              <CardTitle>{t.detail.inspection}</CardTitle>
+              <CardDescription>{t.detail.inspectionSub}</CardDescription>
             </CardHeader>
             <CardContent className="px-0">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="pl-6">Element</TableHead>
-                    <TableHead>Condition</TableHead>
-                    <TableHead className="pr-6">Notes</TableHead>
+                    <TableHead className="pl-6">{t.detail.element}</TableHead>
+                    <TableHead>{t.detail.conditionCol}</TableHead>
+                    <TableHead className="pr-6">{t.detail.notes}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -209,7 +204,7 @@ export default async function SiteDetailPage({
           {/* Assigned surveyor */}
           <Card>
             <CardHeader>
-              <CardTitle>Assigned Surveyor</CardTitle>
+              <CardTitle>{t.detail.assignedSurveyor}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
@@ -230,11 +225,11 @@ export default async function SiteDetailPage({
               </Button>
               <div className="grid grid-cols-2 gap-3 border-t pt-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Survey date</p>
+                  <p className="text-muted-foreground">{t.detail.surveyDate}</p>
                   <p className="font-medium">{formatDate(site.surveyDate)}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Last updated</p>
+                  <p className="text-muted-foreground">{t.detail.lastUpdated}</p>
                   <p className="font-medium">{formatDate(site.lastUpdated)}</p>
                 </div>
               </div>
@@ -244,7 +239,7 @@ export default async function SiteDetailPage({
           {/* Location */}
           <Card>
             <CardHeader>
-              <CardTitle>Location</CardTitle>
+              <CardTitle>{t.detail.location}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-lg border bg-muted">
@@ -274,7 +269,7 @@ export default async function SiteDetailPage({
           {/* Assets shortcuts */}
           <Card>
             <CardHeader>
-              <CardTitle>Attached Records</CardTitle>
+              <CardTitle>{t.detail.attachedRecords}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Link
@@ -285,9 +280,9 @@ export default async function SiteDetailPage({
                   <Images className="h-4 w-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Photo Gallery</p>
+                  <p className="text-sm font-medium">{t.detail.photoGallery}</p>
                   <p className="text-xs text-muted-foreground">
-                    {site.photos.length} site photographs
+                    {site.photos.length} साइट छायाचित्रे
                   </p>
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -300,9 +295,9 @@ export default async function SiteDetailPage({
                   <FileText className="h-4 w-4" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Documents</p>
+                  <p className="text-sm font-medium">{t.detail.documents}</p>
                   <p className="text-xs text-muted-foreground">
-                    {site.documents.length} files attached
+                    {site.documents.length} फाइल्स संलग्न
                   </p>
                 </div>
                 <ArrowRight className="h-4 w-4 text-muted-foreground" />

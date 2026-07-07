@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn, formatDate } from "@/lib/utils";
+import { t, tDocType } from "@/lib/i18n";
 
 const typeMeta: Record<
   DocumentType,
@@ -72,7 +73,7 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
         <div className="relative sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search documents…"
+            placeholder={t.documents.search}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-9"
@@ -90,7 +91,7 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
                   : "border-border text-muted-foreground hover:bg-muted"
               )}
             >
-              {f}
+              {tDocType[f]}
             </button>
           ))}
         </div>
@@ -100,12 +101,12 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Document</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Version</TableHead>
-              <TableHead>Uploaded by</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Size</TableHead>
+              <TableHead>{t.documents.colDocument}</TableHead>
+              <TableHead>{t.documents.colType}</TableHead>
+              <TableHead>{t.documents.colVersion}</TableHead>
+              <TableHead>{t.documents.colUploadedBy}</TableHead>
+              <TableHead>{t.documents.colDate}</TableHead>
+              <TableHead className="text-right">{t.documents.colSize}</TableHead>
               <TableHead className="w-10"></TableHead>
             </TableRow>
           </TableHeader>
@@ -129,7 +130,7 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{doc.type}</Badge>
+                    <Badge variant="secondary">{tDocType[doc.type]}</Badge>
                   </TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">
                     {doc.version}
@@ -152,10 +153,10 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                          <Download className="h-4 w-4" /> Download
+                          <Download className="h-4 w-4" /> {t.documents.download}
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Preview</DropdownMenuItem>
-                        <DropdownMenuItem>Version history</DropdownMenuItem>
+                        <DropdownMenuItem>{t.documents.preview}</DropdownMenuItem>
+                        <DropdownMenuItem>{t.documents.history}</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -166,7 +167,7 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
         </Table>
         {filtered.length === 0 && (
           <div className="py-16 text-center text-sm text-muted-foreground">
-            No documents match your filters.
+            {t.documents.noDocs}
           </div>
         )}
       </Card>

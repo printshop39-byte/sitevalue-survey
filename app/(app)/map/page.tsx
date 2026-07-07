@@ -4,14 +4,15 @@ import { ComingSoon } from "@/components/coming-soon";
 import { Card, CardContent } from "@/components/ui/card";
 import { sites } from "@/lib/mock-data";
 import { formatCurrency } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export default function MapPage() {
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Site Map"
-        description="Geographic distribution of surveyed sites"
-        crumbs={[{ label: "Workspace", href: "/dashboard" }, { label: "Site Map" }]}
+        title={t.nav.map}
+        description="सर्वेक्षण केलेल्या साइट्सचे भौगोलिक वितरण"
+        crumbs={[{ label: t.brand.workspace, href: "/dashboard" }, { label: t.nav.map }]}
       />
 
       <Card className="overflow-hidden">
@@ -43,8 +44,8 @@ export default function MapPage() {
           ))}
         </div>
         <CardContent className="p-4 text-sm text-muted-foreground">
-          Illustrative map view — {sites.length} sites plotted. Interactive
-          mapping integration is stubbed in this prototype.
+          प्रातिनिधिक नकाशा — {sites.length} साइट्स दर्शवल्या. परस्परसंवादी नकाशा
+          एकत्रीकरण या प्रोटोटाइपमध्ये stub केलेले आहे.
         </CardContent>
       </Card>
     </div>

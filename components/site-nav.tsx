@@ -4,14 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Images, LayoutPanelTop } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export function SiteNav({ id }: { id: string }) {
   const pathname = usePathname();
   const base = `/sites/${id}`;
   const tabs = [
-    { href: base, label: "Overview", icon: LayoutPanelTop },
-    { href: `${base}/photos`, label: "Photo Gallery", icon: Images },
-    { href: `${base}/documents`, label: "Documents", icon: FileText },
+    { href: base, label: t.siteNav.overview, icon: LayoutPanelTop },
+    { href: `${base}/photos`, label: t.siteNav.photos, icon: Images },
+    { href: `${base}/documents`, label: t.siteNav.documents, icon: FileText },
   ];
 
   return (

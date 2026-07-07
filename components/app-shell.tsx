@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
 import { currentUser } from "@/lib/mock-data";
+import { t } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -34,14 +35,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const nav = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/sites", label: "Sites", icon: Building2 },
-  { href: "/map", label: "Site Map", icon: Map },
-  { href: "/reports", label: "Reports", icon: FileText },
+  { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
+  { href: "/sites", label: t.nav.sites, icon: Building2 },
+  { href: "/map", label: t.nav.map, icon: Map },
+  { href: "/reports", label: t.nav.reports, icon: FileText },
 ];
 
 const secondaryNav = [
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/settings", label: t.nav.settings, icon: Settings },
 ];
 
 function SidebarBody({ pathname }: { pathname: string }) {
@@ -56,13 +57,13 @@ function SidebarBody({ pathname }: { pathname: string }) {
         </div>
         <div className="leading-tight">
           <p className="text-sm font-semibold text-sidebar-foreground">SiteValue</p>
-          <p className="text-[11px] text-sidebar-foreground/60">Survey &amp; Valuation</p>
+          <p className="text-[11px] text-sidebar-foreground/60">{t.brand.subtitle}</p>
         </div>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
         <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">
-          Workspace
+          {t.brand.workspace}
         </p>
         {nav.map((item) => {
           const Icon = item.icon;
@@ -85,7 +86,7 @@ function SidebarBody({ pathname }: { pathname: string }) {
         })}
 
         <p className="px-3 pb-2 pt-5 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/40">
-          System
+          {t.brand.system}
         </p>
         {secondaryNav.map((item) => {
           const Icon = item.icon;
@@ -158,7 +159,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="relative hidden max-w-md flex-1 sm:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search sites, references, surveyors…"
+              placeholder={t.common.search}
               className="h-9 border-transparent bg-muted/60 pl-9"
             />
           </div>
@@ -187,15 +188,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuLabel>{currentUser.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <UserCircle className="h-4 w-4" /> Profile
+                  <UserCircle className="h-4 w-4" /> {t.user.profile}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Settings className="h-4 w-4" /> Preferences
+                  <Settings className="h-4 w-4" /> {t.user.preferences}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/login">
-                    <LogOut className="h-4 w-4" /> Sign out
+                    <LogOut className="h-4 w-4" /> {t.user.signout}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

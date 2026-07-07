@@ -3,25 +3,26 @@ import type { Site } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkflowBadge } from "@/components/status-badge";
 import { formatNumber } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export function SiteSummaryCard({ site }: { site: Site }) {
   const rows: { icon: typeof Hash; label: string; value: string }[] = [
-    { icon: Hash, label: "Survey No.", value: site.surveyNo },
-    { icon: Trees, label: "Village / Locality", value: site.village },
-    { icon: Maximize, label: "Area", value: `${formatNumber(site.areaSqFt)} sq ft` },
+    { icon: Hash, label: t.summary.surveyNo, value: site.surveyNo },
+    { icon: Trees, label: t.summary.village, value: site.village },
+    { icon: Maximize, label: t.summary.area, value: `${formatNumber(site.areaSqFt)} ${t.sites.sqft}` },
     {
       icon: MapPin,
-      label: "Coordinates",
+      label: t.summary.coordinates,
       value: `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`,
     },
-    { icon: Images, label: "Photographs", value: `${site.photos.length} files` },
-    { icon: FileText, label: "Documents", value: `${site.documents.length} files` },
+    { icon: Images, label: t.summary.photographs, value: `${site.photos.length} फाइल्स` },
+    { icon: FileText, label: t.summary.documents, value: `${site.documents.length} फाइल्स` },
   ];
 
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0">
-        <CardTitle>Site Summary</CardTitle>
+        <CardTitle>{t.summary.title}</CardTitle>
         <WorkflowBadge stage={site.workflowStage} />
       </CardHeader>
       <CardContent>

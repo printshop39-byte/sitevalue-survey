@@ -6,6 +6,7 @@ import type { Photo } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
+import { t, tPhotoCat } from "@/lib/i18n";
 
 const categories = ["All", "Exterior", "Interior", "Structural", "Site", "Defect"] as const;
 
@@ -48,7 +49,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
                   : "border-border text-muted-foreground hover:bg-muted"
               )}
             >
-              {c}
+              {tPhotoCat[c] ?? c}
               <span
                 className={cn(
                   "rounded-full px-1.5 text-[10px]",
@@ -82,7 +83,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
                 variant={photo.category === "Defect" ? "destructive" : "secondary"}
                 className="bg-black/50 text-white backdrop-blur"
               >
-                {photo.category}
+                {tPhotoCat[photo.category] ?? photo.category}
               </Badge>
               {photo.tag && (
                 <Badge variant="warning" className="backdrop-blur">
@@ -100,7 +101,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
       {filtered.length === 0 && (
         <div className="flex flex-col items-center gap-2 py-16 text-muted-foreground">
           <Camera className="h-8 w-8" />
-          <p className="text-sm">No photos in this category.</p>
+          <p className="text-sm">{t.gallery.noPhotos}</p>
         </div>
       )}
 
@@ -114,7 +115,7 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
             <div>
               <p className="text-sm font-medium">{open.caption}</p>
               <p className="text-xs text-white/60">
-                {open.category} · {formatDate(open.takenAt)} ·{" "}
+                {tPhotoCat[open.category] ?? open.category} · {formatDate(open.takenAt)} ·{" "}
                 {active! + 1} / {filtered.length}
               </p>
             </div>

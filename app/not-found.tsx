@@ -9,18 +9,18 @@ export default function NotFound() {
         <Compass className="h-8 w-8" />
       </div>
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold">Page not found</h1>
+        <h1 className="text-3xl font-semibold">पृष्ठ सापडले नाही</h1>
         <p className="max-w-md text-muted-foreground">
-          The site or page you are looking for doesn&apos;t exist or may have
-          been archived.
+          आपण शोधत असलेली साइट किंवा पृष्ठ अस्तित्वात नाही किंवा संग्रहित केले
+          असावे.
         </p>
       </div>
       <div className="flex gap-3">
         <Button asChild>
-          <Link href="/dashboard">Back to dashboard</Link>
+          <Link href="/dashboard">डॅशबोर्डवर परत</Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link href="/sites">Browse sites</Link>
+          <Link href="/sites">साइट्स पहा</Link>
         </Button>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import type { ConditionRating, SiteStatus, WorkflowStage } from "@/lib/types";
+import { tCondition, tStage, tStatus } from "@/lib/i18n";
 
 const statusMap: Record<SiteStatus, { variant: "default" | "success" | "warning" | "muted"; dot: string }> = {
   Approved: { variant: "success", dot: "bg-success" },
@@ -13,7 +14,7 @@ export function StatusBadge({ status }: { status: SiteStatus }) {
   return (
     <Badge variant={s.variant} className="gap-1.5 pl-2">
       <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
-      {status}
+      {tStatus[status]}
     </Badge>
   );
 }
@@ -26,7 +27,7 @@ const conditionMap: Record<ConditionRating, "success" | "default" | "warning" | 
 };
 
 export function ConditionBadge({ condition }: { condition: ConditionRating }) {
-  return <Badge variant={conditionMap[condition]}>{condition}</Badge>;
+  return <Badge variant={conditionMap[condition]}>{tCondition[condition]}</Badge>;
 }
 
 const stageMap: Record<
@@ -41,5 +42,5 @@ const stageMap: Record<
 };
 
 export function WorkflowBadge({ stage }: { stage: WorkflowStage }) {
-  return <Badge variant={stageMap[stage]}>{stage}</Badge>;
+  return <Badge variant={stageMap[stage]}>{tStage[stage]}</Badge>;
 }

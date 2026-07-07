@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/page-header";
 import { SiteNav } from "@/components/site-nav";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { Button } from "@/components/ui/button";
+import { t } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return sites.map((s) => ({ id: s.id }));
@@ -22,16 +23,16 @@ export default async function PhotosPage({
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Photo Gallery"
-        description={`${site.photos.length} photographs captured during survey of ${site.name}`}
+        title={t.detail.photoGallery}
+        description={`${site.name} च्या सर्वेक्षणादरम्यान घेतलेली ${site.photos.length} छायाचित्रे`}
         crumbs={[
-          { label: "Sites", href: "/sites" },
+          { label: t.nav.sites, href: "/sites" },
           { label: site.reference, href: `/sites/${site.id}` },
-          { label: "Photos" },
+          { label: t.gallery.crumb },
         ]}
         actions={
           <Button>
-            <Upload className="h-4 w-4" /> Upload Photos
+            <Upload className="h-4 w-4" /> {t.gallery.upload}
           </Button>
         }
       />

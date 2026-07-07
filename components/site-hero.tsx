@@ -5,6 +5,7 @@ import { StatusBadge, ConditionBadge, WorkflowBadge } from "@/components/status-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { t, tType } from "@/lib/i18n";
 
 export function SiteHero({ site }: { site: Site }) {
   return (
@@ -25,7 +26,7 @@ export function SiteHero({ site }: { site: Site }) {
           <StatusBadge status={site.status} />
           <ConditionBadge condition={site.condition} />
           <Badge variant="secondary" className="bg-white/15 text-white">
-            {site.type}
+            {tType[site.type]}
           </Badge>
         </div>
 
@@ -42,15 +43,15 @@ export function SiteHero({ site }: { site: Site }) {
           <div className="flex flex-col items-start gap-3 sm:items-end">
             <div className="text-left sm:text-right">
               <p className="text-xs uppercase tracking-wide text-white/60">
-                Assessed valuation
+                {t.detail.assessedValuation}
               </p>
               <p className="text-3xl font-semibold">
                 {formatCurrency(site.valuation)}
               </p>
               <p className="flex items-center gap-1 text-xs text-white/70 sm:justify-end">
                 <Star className="h-3 w-3 fill-warning text-warning" />
-                {site.confidence}% confidence ·{" "}
-                {formatCurrency(site.valuationPerSqFt)}/sq ft
+                {site.confidence}% {t.detail.confidence} ·{" "}
+                {formatCurrency(site.valuationPerSqFt)}/{t.sites.sqft}
               </p>
             </div>
             <div className="flex gap-2">
@@ -59,11 +60,11 @@ export function SiteHero({ site }: { site: Site }) {
                 size="sm"
                 className="bg-white/15 text-white hover:bg-white/25"
               >
-                <Share2 className="h-4 w-4" /> Share
+                <Share2 className="h-4 w-4" /> {t.detail.share}
               </Button>
               <Button size="sm" asChild>
                 <Link href={`/print/${site.id}`}>
-                  <Printer className="h-4 w-4" /> Print / Export
+                  <Printer className="h-4 w-4" /> {t.detail.print}
                 </Link>
               </Button>
             </div>

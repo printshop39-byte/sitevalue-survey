@@ -35,6 +35,7 @@ import {
   valuationTrend,
 } from "@/lib/mock-data";
 import { formatCurrency, formatNumber, initials } from "@/lib/utils";
+import { t, tStatus, tType } from "@/lib/i18n";
 
 const activityIcon = {
   updated: CircleDollarSign,
@@ -73,16 +74,16 @@ export default function DashboardPage() {
       </div>
 
       <PageHeader
-        title="Portfolio Dashboard"
-        description="Overview of surveyed sites, valuations and team activity."
+        title={t.dashboard.title}
+        description={t.dashboard.subtitle}
         actions={
           <>
             <Button variant="outline">
-              <FileCheck2 className="h-4 w-4" /> Export
+              <FileCheck2 className="h-4 w-4" /> {t.common.export}
             </Button>
             <Button asChild>
               <Link href="/sites">
-                <Plus className="h-4 w-4" /> New Survey
+                <Plus className="h-4 w-4" /> {t.common.newSurvey}
               </Link>
             </Button>
           </>
@@ -92,34 +93,34 @@ export default function DashboardPage() {
       {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
-          label="Portfolio Valuation"
+          label={t.dashboard.kpiValuation}
           value={formatCurrency(portfolioStats.totalValuation, true)}
           icon={CircleDollarSign}
           trend={{ value: "8.2%", positive: true }}
-          hint="vs last quarter"
+          hint={t.dashboard.vsQuarter}
           accent="primary"
         />
         <KpiCard
-          label="Active Sites"
+          label={t.dashboard.kpiSites}
           value={String(portfolioStats.siteCount)}
           icon={Building2}
-          trend={{ value: "3 new", positive: true }}
-          hint="this month"
+          trend={{ value: `3 ${t.dashboard.newN}`, positive: true }}
+          hint={t.dashboard.newThisMonth}
           accent="success"
         />
         <KpiCard
-          label="Pending Review"
+          label={t.dashboard.kpiPending}
           value={String(portfolioStats.inReview + portfolioStats.draft)}
           icon={ClipboardCheck}
-          hint={`${portfolioStats.inReview} in review · ${portfolioStats.draft} draft`}
+          hint={`${portfolioStats.inReview} ${tStatus["In Review"]} · ${portfolioStats.draft} ${tStatus.Draft}`}
           accent="warning"
         />
         <KpiCard
-          label="Avg. Confidence"
+          label={t.dashboard.kpiConfidence}
           value={`${portfolioStats.avgConfidence}%`}
           icon={Gauge}
           trend={{ value: "2.1%", positive: true }}
-          hint="model accuracy"
+          hint={t.dashboard.modelAccuracy}
           accent="primary"
         />
       </div>
@@ -129,8 +130,8 @@ export default function DashboardPage() {
         <Card className="lg:col-span-2">
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <div>
-              <CardTitle>Valuation Logged</CardTitle>
-              <CardDescription>Cumulative portfolio value, ₹ Cr</CardDescription>
+              <CardTitle>{t.dashboard.valuationLogged}</CardTitle>
+              <CardDescription>{t.dashboard.valuationLoggedSub}</CardDescription>
             </div>
             <div className="text-right">
               <p className="text-2xl font-semibold">
@@ -146,8 +147,8 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Status Distribution</CardTitle>
-            <CardDescription>Sites by survey stage</CardDescription>
+            <CardTitle>{t.dashboard.statusDist}</CardTitle>
+            <CardDescription>{t.dashboard.statusDistSub}</CardDescription>
           </CardHeader>
           <CardContent>
             <StatusDonut data={statusDistribution} />
@@ -159,20 +160,20 @@ export default function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Valuation by Asset Type</CardTitle>
-            <CardDescription>Distribution across the portfolio</CardDescription>
+            <CardTitle>{t.dashboard.byType}</CardTitle>
+            <CardDescription>{t.dashboard.byTypeSub}</CardDescription>
           </CardHeader>
           <CardContent>
             <ValuationBars data={valuationByType} />
             <div className="mt-6 grid grid-cols-2 gap-4 border-t pt-4 text-sm">
               <div>
-                <p className="text-muted-foreground">Total floor area</p>
+                <p className="text-muted-foreground">{t.dashboard.totalArea}</p>
                 <p className="font-semibold">
-                  {formatNumber(portfolioStats.totalArea, true)} sq ft
+                  {formatNumber(portfolioStats.totalArea, true)} {t.sites.sqft}
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">Avg. ₹ / sq ft</p>
+                <p className="text-muted-foreground">{t.dashboard.avgPerSqFt}</p>
                 <p className="font-semibold">
                   {formatCurrency(portfolioStats.avgPerSqFt)}
                 </p>
@@ -185,12 +186,12 @@ export default function DashboardPage() {
         <Card className="lg:col-span-2">
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <div>
-              <CardTitle>Recently Updated Sites</CardTitle>
-              <CardDescription>Latest survey activity</CardDescription>
+              <CardTitle>{t.dashboard.recentSites}</CardTitle>
+              <CardDescription>{t.dashboard.recentSitesSub}</CardDescription>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/sites">
-                View all <ArrowRight className="h-4 w-4" />
+                {t.common.viewAll} <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
           </CardHeader>
@@ -208,7 +209,7 @@ export default function DashboardPage() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{site.name}</p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {site.reference} · {site.city} · {site.type}
+                      {site.reference} · {site.city} · {tType[site.type]}
                     </p>
                   </div>
                   <div className="hidden text-right sm:block">
@@ -216,7 +217,7 @@ export default function DashboardPage() {
                       {formatCurrency(site.valuation, true)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatNumber(site.areaSqFt, true)} sq ft
+                      {formatNumber(site.areaSqFt, true)} {t.sites.sqft}
                     </p>
                   </div>
                   <StatusBadge status={site.status} />
@@ -230,8 +231,8 @@ export default function DashboardPage() {
       {/* Activity feed */}
       <Card>
         <CardHeader>
-          <CardTitle>Team Activity</CardTitle>
-          <CardDescription>Recent actions across your workspace</CardDescription>
+          <CardTitle>{t.dashboard.teamActivity}</CardTitle>
+          <CardDescription>{t.dashboard.teamActivitySub}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-1">

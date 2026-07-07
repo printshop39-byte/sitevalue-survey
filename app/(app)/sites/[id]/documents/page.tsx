@@ -6,6 +6,7 @@ import { SiteNav } from "@/components/site-nav";
 import { DocumentList } from "@/components/document-list";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { t } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return sites.map((s) => ({ id: s.id }));
@@ -26,25 +27,25 @@ export default async function DocumentsPage({
   }, {});
 
   const stats = [
-    { label: "Total documents", value: site.documents.length },
-    { label: "Reports", value: byType["Report"] ?? 0 },
-    { label: "Drawings", value: byType["Drawing"] ?? 0 },
-    { label: "Certificates & Legal", value: (byType["Certificate"] ?? 0) + (byType["Legal"] ?? 0) },
+    { label: t.documents.statTotal, value: site.documents.length },
+    { label: t.documents.statReports, value: byType["Report"] ?? 0 },
+    { label: t.documents.statDrawings, value: byType["Drawing"] ?? 0 },
+    { label: t.documents.statCertsLegal, value: (byType["Certificate"] ?? 0) + (byType["Legal"] ?? 0) },
   ];
 
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Documents"
-        description={`Survey documentation and records for ${site.name}`}
+        title={t.documents.title}
+        description={`${site.name} साठी सर्वेक्षण कागदपत्रे व नोंदी`}
         crumbs={[
-          { label: "Sites", href: "/sites" },
+          { label: t.nav.sites, href: "/sites" },
           { label: site.reference, href: `/sites/${site.id}` },
-          { label: "Documents" },
+          { label: t.documents.crumb },
         ]}
         actions={
           <Button>
-            <Upload className="h-4 w-4" /> Upload Document
+            <Upload className="h-4 w-4" /> {t.documents.upload}
           </Button>
         }
       />

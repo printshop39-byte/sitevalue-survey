@@ -6,19 +6,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { sites } from "@/lib/mock-data";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export default function ReportsPage() {
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
-        title="Reports"
-        description="Generate and export valuation reports for any site"
-        crumbs={[{ label: "Workspace", href: "/dashboard" }, { label: "Reports" }]}
+        title={t.nav.reports}
+        description="कोणत्याही साइटसाठी मूल्यांकन अहवाल तयार करा व निर्यात करा"
+        crumbs={[{ label: t.brand.workspace, href: "/dashboard" }, { label: t.nav.reports }]}
       />
 
       <Card>
         <CardHeader>
-          <CardTitle>Valuation Reports</CardTitle>
+          <CardTitle>मूल्यांकन अहवाल</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {sites.map((s) => (
@@ -39,7 +40,7 @@ export default function ReportsPage() {
               <StatusBadge status={s.status} />
               <Button size="sm" variant="outline" asChild>
                 <Link href={`/print/${s.id}`}>
-                  <Printer className="h-4 w-4" /> Open report
+                  <Printer className="h-4 w-4" /> अहवाल उघडा
                 </Link>
               </Button>
             </div>

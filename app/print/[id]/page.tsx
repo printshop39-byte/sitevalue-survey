@@ -4,6 +4,7 @@ import { getSite, sites, currentUser } from "@/lib/mock-data";
 import { PrintToolbar } from "@/components/print-toolbar";
 import { PrintStamp } from "@/components/print-stamp";
 import { formatCurrency, formatDate, formatNumber } from "@/lib/utils";
+import { t, tCondition, tStatus, tType } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return sites.map((s) => ({ id: s.id }));
@@ -19,17 +20,17 @@ export default async function PrintPage({
   if (!site) notFound();
 
   const keyFacts: [string, string][] = [
-    ["Reference", site.reference],
-    ["Survey No.", site.surveyNo],
-    ["Village / Locality", site.village],
-    ["Asset type", site.type],
-    ["Address", `${site.address}, ${site.city}, ${site.region}`],
-    ["Coordinates", `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`],
-    ["Floor area", `${formatNumber(site.areaSqFt)} sq ft`],
-    ["Plot size", site.plotSize],
-    ["Year built", site.yearBuilt === 0 ? "Undeveloped" : String(site.yearBuilt)],
-    ["Overall condition", site.condition],
-    ["Survey date", formatDate(site.surveyDate)],
+    [t.print.fReference, site.reference],
+    [t.print.fSurveyNo, site.surveyNo],
+    [t.print.fVillage, site.village],
+    [t.print.fAssetType, tType[site.type]],
+    [t.print.fAddress, `${site.address}, ${site.city}, ${site.region}`],
+    [t.print.fCoordinates, `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`],
+    [t.print.fFloorArea, `${formatNumber(site.areaSqFt)} ${t.sites.sqft}`],
+    [t.print.fPlotSize, site.plotSize],
+    [t.print.fYearBuilt, site.yearBuilt === 0 ? t.print.undeveloped : String(site.yearBuilt)],
+    [t.print.fOverallCondition, tCondition[site.condition]],
+    [t.print.fSurveyDate, formatDate(site.surveyDate)],
   ];
 
   return (
@@ -53,18 +54,18 @@ export default async function PrintPage({
             </div>
             <div className="text-right text-xs text-slate-500">
               <p className="font-semibold uppercase tracking-wide text-slate-700">
-                Valuation Report
+                {t.print.valuationReport}
               </p>
-              <p>Ref: {site.reference}</p>
-              <p>Issued: {formatDate(site.lastUpdated)}</p>
-              <p>Status: {site.status}</p>
+              <p>{t.print.ref}: {site.reference}</p>
+              <p>{t.print.issued}: {formatDate(site.lastUpdated)}</p>
+              <p>{t.print.status}: {tStatus[site.status]}</p>
             </div>
           </div>
 
           {/* Title */}
           <div className="py-6">
             <p className="text-xs uppercase tracking-widest text-slate-400">
-              Survey &amp; Site Valuation
+              {t.print.surveyValuation}
             </p>
             <h1 className="mt-1 text-2xl font-bold text-slate-900">
               {site.name}
@@ -78,7 +79,7 @@ export default async function PrintPage({
           <div className="grid grid-cols-3 gap-4 rounded-lg bg-slate-50 p-5">
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
-                Assessed value
+                {t.print.assessedValue}
               </p>
               <p className="text-2xl font-bold text-slate-900">
                 {formatCurrency(site.valuation)}
@@ -86,7 +87,7 @@ export default async function PrintPage({
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
-                Value / sq ft
+                {t.print.valuePerSqft}
               </p>
               <p className="text-2xl font-bold text-slate-900">
                 {formatCurrency(site.valuationPerSqFt)}
@@ -94,7 +95,7 @@ export default async function PrintPage({
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
-                Confidence
+                {t.print.confidence}
               </p>
               <p className="text-2xl font-bold text-slate-900">
                 {site.confidence}%
@@ -103,7 +104,7 @@ export default async function PrintPage({
           </div>
 
           {/* Section: Property particulars */}
-          <Section title="1. Property Particulars">
+          <Section title={t.print.sec1}>
             <table className="w-full">
               <tbody>
                 {keyFacts.map(([k, v], i) => (
@@ -119,18 +120,18 @@ export default async function PrintPage({
           </Section>
 
           {/* Section: Executive summary */}
-          <Section title="2. Executive Summary">
+          <Section title={t.print.sec2}>
             <p className="text-slate-700">{site.summary}</p>
           </Section>
 
           {/* Section: Valuation build-up */}
-          <Section title="3. Valuation Build-up">
+          <Section title={t.print.sec3}>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-300 text-left text-xs uppercase tracking-wide text-slate-500">
-                  <th className="py-2">Component</th>
-                  <th className="py-2 text-right">Amount</th>
-                  <th className="py-2 text-right">Share</th>
+                  <th className="py-2">{t.print.component}</th>
+                  <th className="py-2 text-right">{t.print.amount}</th>
+                  <th className="py-2 text-right">{t.print.share}</th>
                 </tr>
               </thead>
               <tbody>
@@ -146,7 +147,7 @@ export default async function PrintPage({
                   </tr>
                 ))}
                 <tr className="border-t-2 border-slate-800 font-bold">
-                  <td className="py-2 text-slate-900">Total assessed value</td>
+                  <td className="py-2 text-slate-900">{t.print.totalAssessed}</td>
                   <td className="py-2 text-right tabular-nums text-slate-900">
                     {formatCurrency(site.valuation)}
                   </td>
@@ -157,13 +158,13 @@ export default async function PrintPage({
           </Section>
 
           {/* Section: Condition assessment */}
-          <Section title="4. Condition Assessment">
+          <Section title={t.print.sec4}>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-300 text-left text-xs uppercase tracking-wide text-slate-500">
-                  <th className="py-2">Element</th>
-                  <th className="py-2">Condition</th>
-                  <th className="py-2">Notes</th>
+                  <th className="py-2">{t.print.element}</th>
+                  <th className="py-2">{t.print.conditionCol}</th>
+                  <th className="py-2">{t.print.notes}</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,7 +173,7 @@ export default async function PrintPage({
                     <td className="py-2 font-medium text-slate-700">
                       {item.category}
                     </td>
-                    <td className="py-2 text-slate-900">{item.condition}</td>
+                    <td className="py-2 text-slate-900">{tCondition[item.condition]}</td>
                     <td className="py-2 text-slate-600">{item.notes}</td>
                   </tr>
                 ))}
@@ -181,7 +182,7 @@ export default async function PrintPage({
           </Section>
 
           {/* Section: Photographic record */}
-          <Section title="5. Photographic Record">
+          <Section title={t.print.sec5}>
             <div className="grid grid-cols-3 gap-3">
               {site.photos.slice(0, 6).map((p) => (
                 <figure key={p.id} className="overflow-hidden rounded border">
@@ -203,7 +204,7 @@ export default async function PrintPage({
           <div className="mt-8 grid grid-cols-2 gap-8 border-t border-slate-300 pt-6">
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
-                Prepared by
+                {t.print.preparedBy}
               </p>
               <p className="mt-4 border-b border-slate-400 pb-1 font-medium text-slate-900">
                 {site.surveyor.name}
@@ -214,7 +215,7 @@ export default async function PrintPage({
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-400">
-                Reviewed &amp; approved
+                {t.print.reviewedApproved}
               </p>
               <p className="mt-4 border-b border-slate-400 pb-1 font-medium text-slate-900">
                 {currentUser.name}
@@ -230,10 +231,7 @@ export default async function PrintPage({
           />
 
           <p className="mt-6 border-t border-slate-200 pt-4 text-[10px] leading-relaxed text-slate-400">
-            This report is a design prototype produced with mock data for
-            demonstration purposes only and does not constitute professional
-            valuation advice. © {new Date().getFullYear()} {currentUser.org}.
-            All figures are illustrative.
+            {t.print.disclaimer} © {new Date().getFullYear()} {currentUser.org}.
           </p>
         </div>
       </div>

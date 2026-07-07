@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { t } from "@/lib/i18n";
 
 export function ComingSoon({
   icon: Icon,
@@ -20,7 +21,7 @@ export function ComingSoon({
         <div className="space-y-1.5">
           <div className="flex items-center justify-center gap-2">
             <h3 className="text-lg font-semibold">{title}</h3>
-            <Badge variant="secondary">Prototype</Badge>
+            <Badge variant="secondary">{t.common.prototype}</Badge>
           </div>
           <p className="mx-auto max-w-md text-sm text-muted-foreground">
             {description}

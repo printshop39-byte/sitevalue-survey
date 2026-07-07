@@ -14,13 +14,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { t } from "@/lib/i18n";
 
-const highlights = [
-  "Standardised site surveys with audit-ready trails",
-  "Automated valuation models and confidence scoring",
-  "Photo, document and defect management in one place",
-  "Board-ready valuation reports in a single click",
-];
+const highlights = t.login.highlights;
 
 export default function LoginPage() {
   const router = useRouter();
@@ -53,14 +49,14 @@ export default function LoginPage() {
           <div>
             <p className="text-lg font-semibold">SiteValue</p>
             <p className="text-xs text-sidebar-foreground/60">
-              Survey &amp; Valuation Platform
+              {t.brand.subtitle}
             </p>
           </div>
         </div>
 
         <div className="relative max-w-md space-y-6">
           <h1 className="text-3xl font-semibold leading-tight">
-            The valuation workspace built for engineering teams.
+            {t.login.heroTitle}
           </h1>
           <ul className="space-y-3">
             {highlights.map((h) => (
@@ -74,10 +70,10 @@ export default function LoginPage() {
 
         <div className="relative flex items-center gap-6 text-xs text-sidebar-foreground/50">
           <span className="flex items-center gap-1.5">
-            <Building2 className="h-4 w-4" /> ISO 9001 workflows
+            <Building2 className="h-4 w-4" /> {t.login.iso}
           </span>
           <span className="flex items-center gap-1.5">
-            <Lock className="h-4 w-4" /> SOC 2 Type II
+            <Lock className="h-4 w-4" /> {t.login.soc}
           </span>
         </div>
       </div>
@@ -93,15 +89,13 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-8 space-y-1.5">
-            <h2 className="text-2xl font-semibold tracking-tight">Welcome back</h2>
-            <p className="text-sm text-muted-foreground">
-              Sign in to your valuation workspace to continue.
-            </p>
+            <h2 className="text-2xl font-semibold tracking-tight">{t.login.welcome}</h2>
+            <p className="text-sm text-muted-foreground">{t.login.subtitle}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Work email</Label>
+              <Label htmlFor="email">{t.login.email}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -116,9 +110,9 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t.login.password}</Label>
                 <button type="button" className="text-xs font-medium text-primary hover:underline">
-                  Forgot password?
+                  {t.login.forgot}
                 </button>
               </div>
               <div className="relative">
@@ -139,27 +133,27 @@ export default function LoginPage() {
                 defaultChecked
                 className="h-4 w-4 rounded border-input accent-primary"
               />
-              Keep me signed in on this device
+              {t.login.keep}
             </label>
 
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? t.login.signingIn : t.login.signin}
             </Button>
           </form>
 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="h-px flex-1 bg-border" />
-            OR
+            {t.login.or}
             <div className="h-px flex-1 bg-border" />
           </div>
 
           <Button variant="outline" className="w-full" size="lg" asChild>
-            <Link href="/dashboard">Continue with SSO (SAML)</Link>
+            <Link href="/dashboard">{t.login.sso}</Link>
           </Button>
 
           <p className="mt-8 text-center text-xs text-muted-foreground">
-            This is a design prototype. Any credentials will sign you in.
+            {t.login.note}
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { t } from "@/lib/i18n";
 
 /**
  * Official-style print stamp: Printed On / Printed By / Document Version /
@@ -41,10 +42,10 @@ export function PrintStamp({
 
   return (
     <div className="mt-8 grid grid-cols-2 divide-x divide-y divide-slate-200 rounded-md border border-slate-300 sm:grid-cols-4 sm:divide-y-0">
-      {cell("Printed On", stamp)}
-      {cell("Printed By", printedBy)}
-      {cell("Document Version", version)}
-      {cell("Page", `${page} of ${totalPages}`)}
+      {cell(t.print.printedOn, stamp)}
+      {cell(t.print.printedBy, printedBy)}
+      {cell(t.print.version, version)}
+      {cell(t.print.page, `${totalPages} पैकी ${page}`)}
     </div>
   );
 }
