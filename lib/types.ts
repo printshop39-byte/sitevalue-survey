@@ -1,5 +1,5 @@
 export type SiteStatus = "Draft" | "In Review" | "Approved" | "Archived";
-export type SiteType = "Commercial" | "Industrial" | "Residential" | "Land" | "Mixed Use";
+export type SiteType = "Commercial" | "Industrial" | "Residential" | "Land" | "Mixed Use" | "Agricultural";
 export type WorkflowStage =
   | "Draft"
   | "Survey Pending"

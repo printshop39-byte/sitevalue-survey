@@ -130,7 +130,7 @@ export default function DashboardPage() {
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <div>
               <CardTitle>Valuation Logged</CardTitle>
-              <CardDescription>Cumulative portfolio value, £M</CardDescription>
+              <CardDescription>Cumulative portfolio value, ₹ Cr</CardDescription>
             </div>
             <div className="text-right">
               <p className="text-2xl font-semibold">
@@ -172,7 +172,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">Avg. £ / sq ft</p>
+                <p className="text-muted-foreground">Avg. ₹ / sq ft</p>
                 <p className="font-semibold">
                   {formatCurrency(portfolioStats.avgPerSqFt)}
                 </p>

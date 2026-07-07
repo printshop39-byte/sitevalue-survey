@@ -44,6 +44,7 @@ const types: (SiteType | "All")[] = [
   "Industrial",
   "Residential",
   "Mixed Use",
+  "Agricultural",
   "Land",
 ];
 
