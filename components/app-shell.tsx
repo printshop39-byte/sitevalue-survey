@@ -15,9 +15,7 @@ import {
   Menu,
   Printer,
   Search,
-  Settings,
   Upload,
-  UserCircle,
   Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -27,6 +25,8 @@ import { useAuth, useRequireAuth, type Role } from "@/components/auth-provider";
 import { ClientLogo } from "@/components/client-logo";
 import { LanguageToggle } from "@/components/language-toggle";
 import { AboutDialog } from "@/components/about-dialog";
+import { AppFooter } from "@/components/app-footer";
+import { BrandLoading } from "@/components/brand-loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -186,7 +186,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   // Block rendering until auth is resolved to avoid a flash of protected UI.
   if (!ready || !allowed || !user) {
-    return <div className="min-h-screen bg-background" />;
+    return <BrandLoading />;
   }
 
   const signOut = () => {
@@ -263,14 +263,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                <DropdownMenuLabel className="font-normal">
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <UserCircle className="h-4 w-4" /> {t.user.profile}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="h-4 w-4" /> {t.user.preferences}
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setAboutOpen(true)}>
                   <Info className="h-4 w-4" /> {t.about.menu}
                 </DropdownMenuItem>
@@ -283,7 +280,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+        <main className="min-h-[calc(100vh-4rem-3.5rem)]">{children}</main>
+        <AppFooter />
       </div>
 
       <AboutDialog open={aboutOpen} onOpenChange={setAboutOpen} />

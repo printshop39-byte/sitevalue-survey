@@ -17,9 +17,10 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SiteValue — Survey & Site Valuation Platform",
+  title: "K D SOFT | Survey & Site Valuation",
   description:
-    "Enterprise survey and site valuation workspace for engineering and valuation teams.",
+    "Survey & Site Valuation Management System by K D SOFT — standardised site surveys, valuation models and board-ready reports for engineering teams.",
+  applicationName: "K D SOFT — Survey & Site Valuation",
 };
 
 export default function RootLayout({

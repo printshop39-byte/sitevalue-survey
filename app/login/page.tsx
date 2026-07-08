@@ -20,6 +20,7 @@ import { ClientLogo } from "@/components/client-logo";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useI18n } from "@/components/i18n-provider";
 import { ACCOUNTS, useAuth } from "@/components/auth-provider";
+import { BrandLoading } from "@/components/brand-loading";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function LoginPage() {
         setError(true);
         setLoading(false);
       }
-    }, 600);
+    }, 1100);
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -58,6 +59,8 @@ export default function LoginPage() {
   }
 
   const roleIcon = { admin: UserCog, staff: UserRound };
+
+  if (loading) return <BrandLoading />;
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -236,7 +239,10 @@ export default function LoginPage() {
               {t.common.owner} · {t.common.version}
             </p>
             <p className="text-[11px] text-muted-foreground">
-              {t.common.preparedForDemo}
+              {t.common.systemName}
+            </p>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              © 2026 K D SOFT · {t.common.preparedForDemo}
             </p>
           </div>
         </div>

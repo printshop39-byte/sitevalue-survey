@@ -76,6 +76,15 @@ const en = {
     version: "Version 1.0",
     preparedForDemo: "Prepared for Client Demo",
     owner: "KEDAR DINGANKAR DME",
+    systemName: "Survey & Site Valuation Management System",
+    loadingWorkspace: "Preparing your workspace…",
+  },
+  notFound: {
+    code: "404",
+    title: "Page not found",
+    body: "The page you're looking for doesn't exist or has moved.",
+    home: "Back to dashboard",
+    login: "Go to login",
   },
   about: {
     menu: "About",
@@ -538,6 +547,15 @@ const mr: Dictionary = {
     version: "आवृत्ती १.०",
     preparedForDemo: "क्लायंट डेमोसाठी तयार",
     owner: "KEDAR DINGANKAR DME",
+    systemName: "सर्वेक्षण व साइट मूल्यांकन व्यवस्थापन प्रणाली",
+    loadingWorkspace: "आपले कार्यक्षेत्र तयार होत आहे…",
+  },
+  notFound: {
+    code: "404",
+    title: "पृष्ठ सापडले नाही",
+    body: "आपण शोधत असलेले पृष्ठ अस्तित्वात नाही किंवा स्थलांतरित झाले आहे.",
+    home: "डॅशबोर्डवर परत",
+    login: "लॉगिनवर जा",
   },
   about: {
     menu: "विषयी",
