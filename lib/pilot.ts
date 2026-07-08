@@ -10,7 +10,7 @@
  * redeploys automatically and the "Send feedback" link appears app-wide.
  */
 export const pilot = {
-  whatsappNumber: "", // ← set the K D SOFT WhatsApp number here to enable feedback
+  whatsappNumber: "919890030029", // K D SOFT — +91 98900 30029
   feedbackPrompt:
     "Hi K D SOFT — my feedback on the Survey & Site Valuation demo:",
 };
