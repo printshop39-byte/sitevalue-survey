@@ -24,6 +24,7 @@ import {
 import { clientBrand, surveyors } from "@/lib/mock-data";
 import { cn, initials } from "@/lib/utils";
 import { useI18n } from "@/components/i18n-provider";
+import { useRequireAuth } from "@/components/auth-provider";
 import type { Locale } from "@/lib/i18n";
 
 function Switch({
@@ -56,8 +57,11 @@ function Switch({
 
 export default function SettingsPage() {
   const { t, locale, setLocale } = useI18n();
+  const { allowed } = useRequireAuth("admin");
   const [notif, setNotif] = useState({ email: true, weekly: true, mentions: false });
   const [saved, setSaved] = useState(false);
+
+  if (!allowed) return null;
 
   const save = () => {
     setSaved(true);

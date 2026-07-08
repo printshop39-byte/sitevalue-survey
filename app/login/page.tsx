@@ -1,15 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
+  AlertCircle,
   Building2,
   CheckCircle2,
   Loader2,
   Lock,
   Mail,
   ShieldCheck,
+  UserCog,
+  UserRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,18 +19,45 @@ import { Label } from "@/components/ui/label";
 import { ClientLogo } from "@/components/client-logo";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useI18n } from "@/components/i18n-provider";
+import { ACCOUNTS, useAuth } from "@/components/auth-provider";
 
 export default function LoginPage() {
   const router = useRouter();
   const { t } = useI18n();
+  const { login } = useAuth();
   const highlights = t.login.highlights;
+
+  const [email, setEmail] = useState(ACCOUNTS[0].email);
+  const [password, setPassword] = useState(ACCOUNTS[0].password);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  function attempt(mail: string, pass: string) {
+    setLoading(true);
+    setError(false);
+    // Small delay to mimic a network round-trip.
+    window.setTimeout(() => {
+      if (login(mail, pass)) {
+        router.push("/dashboard");
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+    }, 600);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setTimeout(() => router.push("/dashboard"), 700);
+    attempt(email, password);
   }
+
+  function useAccount(mail: string, pass: string) {
+    setEmail(mail);
+    setPassword(pass);
+    setError(false);
+  }
+
+  const roleIcon = { admin: UserCog, staff: UserRound };
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -50,16 +79,12 @@ export default function LoginPage() {
           </div>
           <div>
             <p className="text-lg font-semibold">SiteValue</p>
-            <p className="text-xs text-sidebar-foreground/60">
-              {t.brand.subtitle}
-            </p>
+            <p className="text-xs text-sidebar-foreground/60">{t.brand.subtitle}</p>
           </div>
         </div>
 
         <div className="relative max-w-md space-y-6">
-          <h1 className="text-3xl font-semibold leading-tight">
-            {t.login.heroTitle}
-          </h1>
+          <h1 className="text-3xl font-semibold leading-tight">{t.login.heroTitle}</h1>
           <ul className="space-y-3">
             {highlights.map((h) => (
               <li key={h} className="flex items-start gap-3 text-sm text-sidebar-foreground/80">
@@ -104,7 +129,8 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  defaultValue="aarti.deshmukh@sahyadrisurvey.in"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="pl-9"
                   required
                 />
@@ -123,12 +149,20 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type="password"
-                  defaultValue="demo-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="pl-9"
                   required
                 />
               </div>
             </div>
+
+            {error && (
+              <p className="flex items-center gap-2 rounded-md bg-destructive/10 px-3 py-2 text-xs font-medium text-destructive">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                {t.login.invalid}
+              </p>
+            )}
 
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               <input
@@ -145,19 +179,45 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="h-px flex-1 bg-border" />
-            {t.login.or}
-            <div className="h-px flex-1 bg-border" />
+          {/* Demo accounts */}
+          <div className="mt-6 rounded-lg border bg-muted/40 p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.login.demoTitle}
+            </p>
+            <div className="space-y-2">
+              {ACCOUNTS.map((a) => {
+                const Icon = roleIcon[a.role];
+                return (
+                  <div
+                    key={a.email}
+                    className="flex items-center gap-2 rounded-md bg-background px-2.5 py-2"
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0 flex-1 leading-tight">
+                      <p className="truncate text-xs font-medium">
+                        {a.role === "admin" ? t.login.demoAdmin : t.login.demoStaff}
+                      </p>
+                      <p className="truncate font-mono text-[11px] text-muted-foreground">
+                        {a.email} · {a.password}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => useAccount(a.email, a.password)}
+                    >
+                      {t.login.useThis}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <Button variant="outline" className="w-full" size="lg" asChild>
-            <Link href="/dashboard">{t.login.sso}</Link>
-          </Button>
-
-          <p className="mt-8 text-center text-xs text-muted-foreground">
-            {t.login.note}
-          </p>
+          <p className="mt-6 text-center text-xs text-muted-foreground">{t.login.note}</p>
         </div>
       </div>
     </div>

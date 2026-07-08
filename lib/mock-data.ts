@@ -15,6 +15,35 @@ export const clientBrand = {
   district: "Pune, Maharashtra",
 };
 
+// The software vendor / demo owner (shown on the Company Profile page).
+export const company = {
+  name: "K D SOFT",
+  owner: "KEDAR DINGANKAR DME",
+  email: "hello@kdsoft.in",
+  district: "Pune, Maharashtra",
+};
+
+export type StaffRole = "Super Admin" | "Staff" | "Surveyor" | "Manager";
+export type StaffStatus = "Active" | "Inactive";
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  email: string;
+  mobile: string;
+  role: StaffRole;
+  status: StaffStatus;
+}
+
+// Seed team for the Staff Management page (mock only).
+export const staffSeed: StaffMember[] = [
+  { id: "s1", name: "Kedar Dingankar", email: "admin@kdsoft.in", mobile: "+91 98220 11223", role: "Super Admin", status: "Active" },
+  { id: "s2", name: "Sanjay Patil", email: "staff1@kdsoft.in", mobile: "+91 91300 55447", role: "Staff", status: "Active" },
+  { id: "s3", name: "Priya Kulkarni", email: "priya@kdsoft.in", mobile: "+91 90110 22334", role: "Surveyor", status: "Active" },
+  { id: "s4", name: "Rahul More", email: "rahul@kdsoft.in", mobile: "+91 93250 88991", role: "Staff", status: "Inactive" },
+  { id: "s5", name: "Sneha Jadhav", email: "sneha@kdsoft.in", mobile: "+91 94040 66778", role: "Manager", status: "Active" },
+];
+
 export const surveyors: Surveyor[] = [
   { id: "u1", name: "Aarti Deshmukh", role: "Senior Surveyor", email: "aarti.deshmukh@sahyadrisurvey.in", avatarColor: "217 91% 42%" },
   { id: "u2", name: "Rohan Kulkarni", role: "Structural Engineer", email: "rohan.kulkarni@sahyadrisurvey.in", avatarColor: "152 62% 36%" },
