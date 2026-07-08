@@ -1,0 +1,104 @@
+आता project **client demo stage** ला पोहोचला आहे. पुढचा focus **code नाही, business** असायला हवा.
+
+मी असतो तर client meeting आधी फक्त ही 7 कामं केली असती:
+
+### 1. Demo Data Clean करा (30 मिनिटे)
+
+* "Lorem ipsum", "Mock Data", "Demo User" असे शब्द कुठेही दिसू देऊ नका.
+* सर्व site names, staff names, reports वास्तविक वाटले पाहिजेत.
+
+### 2. Demo Flow Lock करा
+
+फक्त हा flow दाखवा:
+
+1. Admin Login
+2. Dashboard
+3. New Site
+4. Map
+5. Upload Documents
+6. Staff Management
+7. Print Preview
+8. Staff Login
+9. Staff restrictions
+
+यापेक्षा जास्त pages उघडू नका.
+
+### 3. Client Feedback Form तयार ठेवा
+
+Meeting च्या शेवटी client ला फक्त हे विचारायचं:
+
+| Question        | Rating (1–5) |
+| --------------- | ------------ |
+| Dashboard       |              |
+| Site Management |              |
+| Upload Flow     |              |
+| Print Report    |              |
+| Ease of Use     |              |
+
+आणि शेवटी:
+
+> **Top 5 changes you want before development starts**
+
+यामुळे scope control राहतो.
+
+### 4. Requirement Freeze
+
+Client म्हणाला "हे ठीक आहे" की लगेच एक mail पाठवा:
+
+> "Based on today's discussion, this workflow will be treated as Phase 1 scope. Any new functionality will be planned for subsequent phases."
+
+हे नंतर disputes टाळतं.
+
+### 5. Commercial Proposal
+
+Prototype approve झाल्यावरच quotation द्या.
+
+Payment milestone उदाहरण:
+
+* 30% – Project Start
+* 40% – UAT Demo
+* 30% – Production Go-Live
+
+### 6. Git Tag
+
+Demo version ला tag द्या:
+
+```bash
+git tag v1.0-client-demo
+git push origin v1.0-client-demo
+```
+
+यामुळे demo version कायम सुरक्षित राहील.
+
+### 7. Production Roadmap
+
+Prototype नंतर implementation order:
+
+* ✅ Supabase Auth
+* ✅ Database Schema
+* ✅ Storage (Photos/Documents)
+* ✅ Role-based RLS
+* ✅ PDF Generation
+* ✅ Audit Logs
+* ✅ Notifications
+
+---
+
+## एक महत्त्वाचा सल्ला
+
+**हा project आता एका client पुरता मर्यादित ठेवू नका.**
+
+त्याच codebase वर पुढे:
+
+* Survey Consultants
+* Valuation Firms
+* Architects
+* Civil Engineers
+* Banks
+* NBFCs
+
+यांना subscription model वर देण्याची क्षमता ठेवा.
+
+यासाठी सुरुवातीपासून `company_id` आधारित multi-tenant architecture ठेवणं योग्य निर्णय आहे.
+
+**माझ्या मते आता coding थांबवा आणि client meeting घ्या.** Client approval मिळाल्यावरच backend development सुरू करा. ते तुमचा वेळही वाचवेल आणि project ची दिशा स्पष्ट ठेवेल.

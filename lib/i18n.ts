@@ -36,6 +36,9 @@ const en = {
     company: "Company Profile",
     access: "User Access",
     print: "Print",
+    printPreview: "Print Preview",
+    newSite: "New Site",
+    uploadDocs: "Upload Documents",
     administration: "Administration",
   },
   user: {
@@ -106,7 +109,7 @@ const en = {
     signingIn: "Signing in…",
     or: "or",
     sso: "Continue with SSO (SAML)",
-    note: "Demo prototype — use one of the demo accounts below to sign in.",
+    note: "Sign in with one of the demo accounts below.",
     invalid: "Invalid email or password. Use a demo account below.",
     demoTitle: "Demo accounts",
     demoAdmin: "Super Admin",
@@ -281,7 +284,7 @@ const en = {
     successBody: "{n} files uploaded successfully to the site record.",
     uploadMore: "Upload more",
     targetSite: "Target site",
-    maxNote: "Prototype: files are previewed locally and not sent to a server.",
+    maxNote: "Files are previewed locally and are not sent to a server.",
     done: "Done",
   },
   newSite: {
@@ -406,7 +409,7 @@ const en = {
     based: "Based in",
     basedValue: "Pune, Maharashtra",
     plan: "Plan",
-    planValue: "Enterprise (Demo)",
+    planValue: "Enterprise",
     contact: "Contact",
     contactValue: "hello@kdsoft.in",
     since: "Member since",
@@ -471,7 +474,7 @@ const en = {
     confidentialNote:
       "Confidential — prepared for the addressee only. Not for redistribution.",
     disclaimer:
-      "This report is a design prototype generated with mock data for demonstration only and is not professional valuation advice.",
+      "This report is generated for demonstration purposes only and does not constitute professional valuation advice.",
   },
 };
 
@@ -495,6 +498,9 @@ const mr: Dictionary = {
     company: "कंपनी प्रोफाइल",
     access: "वापरकर्ता प्रवेश",
     print: "छपाई",
+    printPreview: "प्रिंट पूर्वावलोकन",
+    newSite: "नवीन साइट",
+    uploadDocs: "कागदपत्रे अपलोड",
     administration: "प्रशासन",
   },
   user: {
@@ -565,7 +571,7 @@ const mr: Dictionary = {
     signingIn: "साइन इन होत आहे…",
     or: "किंवा",
     sso: "SSO (SAML) ने पुढे जा",
-    note: "डेमो प्रोटोटाइप — साइन इन करण्यासाठी खालील डेमो खाते वापरा.",
+    note: "साइन इन करण्यासाठी खालील डेमो खाते वापरा.",
     invalid: "अवैध ईमेल किंवा पासवर्ड. खालील डेमो खाते वापरा.",
     demoTitle: "डेमो खाती",
     demoAdmin: "सुपर अ‍ॅडमिन",
@@ -740,7 +746,7 @@ const mr: Dictionary = {
     successBody: "{n} फाइल्स साइट नोंदीमध्ये यशस्वीरित्या अपलोड झाल्या.",
     uploadMore: "आणखी अपलोड",
     targetSite: "लक्ष्य साइट",
-    maxNote: "प्रोटोटाइप: फाइल्स स्थानिक पातळीवर दाखवल्या जातात, सर्व्हरवर पाठवल्या जात नाहीत.",
+    maxNote: "फाइल्स स्थानिक पातळीवर दाखवल्या जातात व सर्व्हरवर पाठवल्या जात नाहीत.",
     done: "पूर्ण",
   },
   newSite: {
@@ -865,7 +871,7 @@ const mr: Dictionary = {
     based: "स्थान",
     basedValue: "पुणे, महाराष्ट्र",
     plan: "योजना",
-    planValue: "एंटरप्राइझ (डेमो)",
+    planValue: "एंटरप्राइझ",
     contact: "संपर्क",
     contactValue: "hello@kdsoft.in",
     since: "सदस्य",
@@ -930,7 +936,7 @@ const mr: Dictionary = {
     confidentialNote:
       "गोपनीय — केवळ संबंधित व्यक्तीसाठी तयार. पुनर्वितरणासाठी नाही.",
     disclaimer:
-      "हा अहवाल केवळ प्रात्यक्षिकासाठी मॉक डेटासह तयार केलेला डिझाइन प्रोटोटाइप आहे व व्यावसायिक मूल्यांकन सल्ला नाही.",
+      "हा अहवाल केवळ प्रात्यक्षिकासाठी तयार केलेला असून तो व्यावसायिक मूल्यांकन सल्ला नाही.",
   },
 };
 

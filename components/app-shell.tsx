@@ -7,10 +7,8 @@ import {
   Bell,
   Building2,
   ChevronsUpDown,
-  FileText,
+  FilePlus2,
   Info,
-  KeyRound,
-  Landmark,
   LayoutDashboard,
   LogOut,
   Map,
@@ -51,27 +49,27 @@ interface NavItem {
 
 function useNav(role: Role): { main: NavItem[]; admin: NavItem[] } {
   const { t } = useI18n();
+  // Demo flow is locked: the sidebar exposes only the pages that are part of
+  // the client-demo script, in order. Other pages remain routable by URL but
+  // are intentionally not surfaced in navigation.
   if (role === "admin") {
     return {
       main: [
         { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
-        { href: "/sites", label: t.nav.sites, icon: Building2 },
+        { href: "/sites/new", label: t.nav.newSite, icon: FilePlus2 },
         { href: "/map", label: t.nav.map, icon: Map },
-        { href: "/reports", label: t.nav.reports, icon: FileText },
-      ],
-      admin: [
-        { href: "/company", label: t.nav.company, icon: Landmark },
+        { href: "/upload", label: t.nav.uploadDocs, icon: Upload },
         { href: "/staff", label: t.nav.staff, icon: Users },
-        { href: "/users", label: t.nav.access, icon: KeyRound },
-        { href: "/settings", label: t.nav.settings, icon: Settings },
+        { href: "/print/STE-4821", label: t.nav.printPreview, icon: Printer },
       ],
+      admin: [],
     };
   }
   return {
     main: [
       { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
       { href: "/sites", label: t.nav.sites, icon: Building2 },
-      { href: "/upload", label: t.nav.upload, icon: Upload },
+      { href: "/upload", label: t.nav.uploadDocs, icon: Upload },
       { href: "/reports", label: t.nav.print, icon: Printer },
     ],
     admin: [],
