@@ -1,6 +1,7 @@
 "use client";
 
 import { ClientLogo } from "@/components/client-logo";
+import { FeedbackLink } from "@/components/feedback-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,6 +52,8 @@ export function AboutDialog({
               </Badge>
             </div>
           </div>
+
+          <FeedbackLink className="text-sm" />
 
           <Button className="w-full" onClick={() => onOpenChange(false)}>
             {t.about.close}

@@ -78,6 +78,7 @@ const en = {
     owner: "KEDAR DINGANKAR DME",
     systemName: "Survey & Site Valuation Management System",
     loadingWorkspace: "Preparing your workspace…",
+    feedback: "Send feedback",
   },
   notFound: {
     code: "404",
@@ -549,6 +550,7 @@ const mr: Dictionary = {
     owner: "KEDAR DINGANKAR DME",
     systemName: "सर्वेक्षण व साइट मूल्यांकन व्यवस्थापन प्रणाली",
     loadingWorkspace: "आपले कार्यक्षेत्र तयार होत आहे…",
+    feedback: "अभिप्राय पाठवा",
   },
   notFound: {
     code: "404",
