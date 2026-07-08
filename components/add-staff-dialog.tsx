@@ -15,9 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useI18n } from "@/components/i18n-provider";
-import type { StaffMember, StaffRole } from "@/lib/mock-data";
-
-const roles: StaffRole[] = ["Staff", "Surveyor", "Manager", "Super Admin"];
+import { staffDesignations, type StaffAccess, type StaffMember } from "@/lib/mock-data";
 
 let idSeq = 100;
 
@@ -36,14 +34,23 @@ export function AddStaffDialog({
     mobile: "",
     password: "",
     confirm: "",
-    role: "Staff" as StaffRole,
+    role: staffDesignations[0] as string,
+    access: "Staff" as StaffAccess,
   });
 
   const set = (k: keyof typeof form) => (v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
   function reset() {
-    setForm({ name: "", email: "", mobile: "", password: "", confirm: "", role: "Staff" });
+    setForm({
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirm: "",
+      role: staffDesignations[0],
+      access: "Staff",
+    });
     setError(null);
     setPhase("form");
   }
@@ -72,6 +79,7 @@ export function AddStaffDialog({
         email: form.email.trim(),
         mobile: form.mobile.trim(),
         role: form.role,
+        access: form.access,
         status: "Active",
       });
       setPhase("done");
@@ -157,24 +165,30 @@ export function AddStaffDialog({
                   />
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <Label>{t.addStaff.role}</Label>
-                <NativeSelect
-                  value={form.role}
-                  onChange={(e) => set("role")(e.target.value)}
-                >
-                  {roles.map((r) => (
-                    <option key={r} value={r}>
-                      {t.staff[
-                        `role${r.replace(/\s/g, "")}` as
-                          | "roleStaff"
-                          | "roleSurveyor"
-                          | "roleManager"
-                          | "roleSuperAdmin"
-                      ] ?? r}
-                    </option>
-                  ))}
-                </NativeSelect>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label>{t.addStaff.role}</Label>
+                  <NativeSelect
+                    value={form.role}
+                    onChange={(e) => set("role")(e.target.value)}
+                  >
+                    {staffDesignations.map((r) => (
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                </div>
+                <div className="space-y-1.5">
+                  <Label>{t.addStaff.access}</Label>
+                  <NativeSelect
+                    value={form.access}
+                    onChange={(e) => set("access")(e.target.value)}
+                  >
+                    <option value="Staff">{t.staff.accessStaff}</option>
+                    <option value="Admin">{t.staff.accessAdmin}</option>
+                  </NativeSelect>
+                </div>
               </div>
 
               {error && (

@@ -95,13 +95,24 @@ export default function LoginPage() {
           </ul>
         </div>
 
-        <div className="relative flex items-center gap-6 text-xs text-sidebar-foreground/50">
-          <span className="flex items-center gap-1.5">
-            <Building2 className="h-4 w-4" /> {t.login.iso}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Lock className="h-4 w-4" /> {t.login.soc}
-          </span>
+        <div className="relative space-y-4">
+          <div className="flex items-center gap-6 text-xs text-sidebar-foreground/50">
+            <span className="flex items-center gap-1.5">
+              <Building2 className="h-4 w-4" /> {t.login.iso}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Lock className="h-4 w-4" /> {t.login.soc}
+            </span>
+          </div>
+          <div className="border-t border-white/10 pt-4 leading-tight">
+            <p className="text-sm font-semibold text-sidebar-foreground/90">K D SOFT</p>
+            <p className="text-xs text-sidebar-foreground/50">
+              {t.common.owner} · {t.common.version}
+            </p>
+            <p className="text-xs text-sidebar-foreground/50">
+              {t.common.preparedForDemo}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -218,6 +229,16 @@ export default function LoginPage() {
           </div>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">{t.login.note}</p>
+
+          <div className="mt-4 border-t pt-4 text-center leading-tight">
+            <p className="text-xs font-semibold">K D SOFT</p>
+            <p className="text-[11px] text-muted-foreground">
+              {t.common.owner} · {t.common.version}
+            </p>
+            <p className="text-[11px] text-muted-foreground">
+              {t.common.preparedForDemo}
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -23,25 +23,37 @@ export const company = {
   district: "Pune, Maharashtra",
 };
 
-export type StaffRole = "Super Admin" | "Staff" | "Surveyor" | "Manager";
+// Access level = the only real permission role (Admin / Staff). `role` below is
+// a display-only job designation.
+export type StaffAccess = "Admin" | "Staff";
 export type StaffStatus = "Active" | "Inactive";
+
+// Job designations offered in the Add Staff dialog (display labels only).
+export const staffDesignations = [
+  "Survey Engineer",
+  "Site Engineer",
+  "Document Controller",
+  "QA Reviewer",
+  "Valuation Analyst",
+] as const;
 
 export interface StaffMember {
   id: string;
   name: string;
   email: string;
   mobile: string;
-  role: StaffRole;
+  role: string; // job designation (display only)
+  access: StaffAccess; // permission role
   status: StaffStatus;
 }
 
 // Seed team for the Staff Management page (mock only).
 export const staffSeed: StaffMember[] = [
-  { id: "s1", name: "Kedar Dingankar", email: "admin@kdsoft.in", mobile: "+91 98220 11223", role: "Super Admin", status: "Active" },
-  { id: "s2", name: "Sanjay Patil", email: "staff1@kdsoft.in", mobile: "+91 91300 55447", role: "Staff", status: "Active" },
-  { id: "s3", name: "Priya Kulkarni", email: "priya@kdsoft.in", mobile: "+91 90110 22334", role: "Surveyor", status: "Active" },
-  { id: "s4", name: "Rahul More", email: "rahul@kdsoft.in", mobile: "+91 93250 88991", role: "Staff", status: "Inactive" },
-  { id: "s5", name: "Sneha Jadhav", email: "sneha@kdsoft.in", mobile: "+91 94040 66778", role: "Manager", status: "Active" },
+  { id: "s1", name: "Amit Patil", email: "amit.patil@kdsoft.in", mobile: "+91 98220 44551", role: "Survey Engineer", access: "Admin", status: "Active" },
+  { id: "s2", name: "Pravin Shinde", email: "pravin.shinde@kdsoft.in", mobile: "+91 91300 77820", role: "Site Engineer", access: "Staff", status: "Active" },
+  { id: "s3", name: "Sneha Kulkarni", email: "sneha.kulkarni@kdsoft.in", mobile: "+91 90110 33218", role: "Document Controller", access: "Staff", status: "Active" },
+  { id: "s4", name: "Akash More", email: "akash.more@kdsoft.in", mobile: "+91 93250 66104", role: "Survey Engineer", access: "Staff", status: "Inactive" },
+  { id: "s5", name: "Pooja Patil", email: "pooja.patil@kdsoft.in", mobile: "+91 94040 22309", role: "QA Reviewer", access: "Staff", status: "Active" },
 ];
 
 export const surveyors: Surveyor[] = [
@@ -126,68 +138,68 @@ interface SiteSeed {
 
 const seeds: SiteSeed[] = [
   {
-    id: "STE-4821", reference: "STE-4821", name: "Chakan Logistics Park", type: "Industrial", status: "Approved",
-    address: "Plot D-14, MIDC Chakan Phase II", city: "Chakan", region: "Pune", lat: 18.7606, lng: 73.8636,
-    area: 184000, plotSize: "6.4 acres (2.59 Ha)", yearBuilt: 2017, condition: "Excellent", surveyor: surveyors[0],
-    surveyDate: "2026-06-18", lastUpdated: "2026-07-02", valuation: 465000000, confidence: 94, progress: 100,
-    coverSeed: "chakan",
-    summary: "Modern PEB warehouse in the Chakan–Talegaon automotive belt with 10 dock levels, 12m clear height and Grade-A office block. Excellent connectivity to the Pune–Nashik highway and JNPT corridor.",
+    id: "STE-4821", reference: "STE-4821", name: "Mumbai Port Warehouse", type: "Industrial", status: "Approved",
+    address: "Indira Dock, Mumbai Port Trust", city: "Mumbai", region: "Mumbai", lat: 18.949, lng: 72.848,
+    area: 210000, plotSize: "5.2 acres", yearBuilt: 2015, condition: "Excellent", surveyor: surveyors[0],
+    surveyDate: "2026-06-18", lastUpdated: "2026-07-02", valuation: 720000000, confidence: 93, progress: 100,
+    coverSeed: "mumbaiport",
+    summary: "Bonded transit warehouse within the Mumbai Port estate with rail siding access and 11m clear height. Prime last-mile logistics location serving the JNPT and city distribution corridors.",
   },
   {
-    id: "STE-4796", reference: "STE-4796", name: "Hinjawadi IT Commercial Tower", type: "Commercial", status: "In Review",
-    address: "Rajiv Gandhi Infotech Park, Phase 1", city: "Hinjawadi", region: "Pune", lat: 18.5912, lng: 73.7389,
-    area: 96500, plotSize: "1.8 acres", yearBuilt: 2012, condition: "Good", surveyor: surveyors[2],
-    surveyDate: "2026-06-25", lastUpdated: "2026-07-05", valuation: 580000000, confidence: 88, progress: 72,
-    coverSeed: "hinjawadi",
-    summary: "Multi-tenant IT/ITeS office tower in the Hinjawadi Phase 1 cluster with strong occupier demand. Lift modernisation and facade cleaning recommended; overall valuation reflects premium rentals.",
+    id: "STE-4796", reference: "STE-4796", name: "Kolhapur MIDC Engineering Unit", type: "Industrial", status: "In Review",
+    address: "Shiroli MIDC, Plot E-42", city: "Kolhapur", region: "Kolhapur", lat: 16.705, lng: 74.2433,
+    area: 128000, plotSize: "3.1 acres", yearBuilt: 2011, condition: "Good", surveyor: surveyors[1],
+    surveyDate: "2026-06-25", lastUpdated: "2026-07-05", valuation: 356000000, confidence: 87, progress: 72,
+    coverSeed: "kolhapurmidc",
+    summary: "Multi-bay engineering and foundry unit in Shiroli MIDC with EOT crane gantries and dedicated power feeder. Roof sheeting refurbishment recommended within the next maintenance cycle.",
   },
   {
-    id: "STE-4772", reference: "STE-4772", name: "Kothrud Residential Complex", type: "Residential", status: "Approved",
-    address: "Survey Colony, Kothrud", city: "Kothrud", region: "Pune", lat: 18.5074, lng: 73.8077,
-    area: 62000, plotSize: "0.9 acres", yearBuilt: 2019, condition: "Excellent", surveyor: surveyors[0],
-    surveyDate: "2026-06-10", lastUpdated: "2026-06-30", valuation: 434000000, confidence: 91, progress: 100,
-    coverSeed: "kothrud",
-    summary: "48-flat residential development in a prime Kothrud location with amenity podium and stilt parking. Low deferred maintenance and strong resale demand in the micro-market.",
+    id: "STE-4772", reference: "STE-4772", name: "Pune Ring Road Commercial Plot", type: "Commercial", status: "Approved",
+    address: "Mundhwa, Pune Ring Road", city: "Pune", region: "Pune", lat: 18.533, lng: 73.933,
+    area: 96000, plotSize: "2.2 acres", yearBuilt: 2019, condition: "Excellent", surveyor: surveyors[0],
+    surveyDate: "2026-06-10", lastUpdated: "2026-06-30", valuation: 512000000, confidence: 91, progress: 100,
+    coverSeed: "puneringroad",
+    summary: "Frontage commercial plot on the Pune Ring Road alignment with high visibility and approved access. Strong appreciation outlook driven by the ring-road infrastructure programme.",
   },
   {
-    id: "STE-4755", reference: "STE-4755", name: "Wagholi Mixed-Use Township", type: "Mixed Use", status: "Draft",
-    address: "Nagar Road, Wagholi", city: "Wagholi", region: "Pune", lat: 18.5793, lng: 73.9819,
-    area: 128000, plotSize: "2.6 acres", yearBuilt: 2022, condition: "Excellent", surveyor: surveyors[3],
-    surveyDate: "2026-07-01", lastUpdated: "2026-07-06", valuation: 512000000, confidence: 79, progress: 34,
-    coverSeed: "wagholi",
-    summary: "Integrated scheme on Nagar Road combining ground-floor retail, mid-rise offices and residential towers. Survey in progress; podium structural review and RERA compliance check pending.",
+    id: "STE-4755", reference: "STE-4755", name: "Sangli Industrial Plot", type: "Industrial", status: "Draft",
+    address: "Kupwad MIDC, Plot C-18", city: "Sangli", region: "Sangli", lat: 16.8524, lng: 74.5815,
+    area: 84000, plotSize: "1.9 acres", yearBuilt: 2022, condition: "Excellent", surveyor: surveyors[3],
+    surveyDate: "2026-07-01", lastUpdated: "2026-07-06", valuation: 288000000, confidence: 79, progress: 34,
+    coverSeed: "sangliplot",
+    summary: "Recently developed industrial plot in Kupwad MIDC, Sangli with new shed structure. Survey in progress; boundary demarcation and services connection verification pending.",
   },
   {
-    id: "STE-4731", reference: "STE-4731", name: "Waluj MIDC Industrial Estate", type: "Industrial", status: "In Review",
-    address: "Sector E, Waluj MIDC", city: "Waluj", region: "Chh. Sambhajinagar", lat: 19.83, lng: 75.24,
-    area: 210500, plotSize: "8.1 acres", yearBuilt: 2005, condition: "Fair", surveyor: surveyors[1],
-    surveyDate: "2026-06-22", lastUpdated: "2026-07-04", valuation: 368000000, confidence: 82, progress: 66,
-    coverSeed: "waluj",
-    summary: "Established multi-shed engineering estate in Waluj MIDC, Chhatrapati Sambhajinagar. Ageing roof sheeting and localised RCC spalling noted; capital expenditure allowance applied to valuation.",
+    id: "STE-4731", reference: "STE-4731", name: "Satara Highway Commercial Site", type: "Commercial", status: "In Review",
+    address: "NH-48, Powai Naka, Satara", city: "Satara", region: "Satara", lat: 17.6805, lng: 74.0183,
+    area: 72000, plotSize: "1.6 acres", yearBuilt: 2018, condition: "Fair", surveyor: surveyors[1],
+    surveyDate: "2026-06-22", lastUpdated: "2026-07-04", valuation: 246000000, confidence: 82, progress: 66,
+    coverSeed: "satarahighway",
+    summary: "Roadside commercial site on the Mumbai–Bengaluru (NH-48) corridor at Satara with fuel-retail and hospitality potential. Localised pavement and drainage remediation noted.",
   },
   {
-    id: "STE-4708", reference: "STE-4708", name: "Nira Agricultural Land Parcel", type: "Agricultural", status: "Approved",
-    address: "Gat 405, Nira, Baramati Taluka", city: "Baramati", region: "Pune", lat: 18.1514, lng: 74.5772,
-    area: 435600, plotSize: "10 acres (400 Guntha)", yearBuilt: 0, condition: "Good", surveyor: surveyors[3],
-    surveyDate: "2026-05-28", lastUpdated: "2026-06-18", valuation: 96000000, confidence: 76, progress: 100,
-    coverSeed: "nira",
-    summary: "Irrigated agricultural holding near Nira with canal access and road frontage. NA potential for warehousing subject to zone conversion; low contamination risk confirmed by soil testing.",
+    id: "STE-4708", reference: "STE-4708", name: "Nashik Ambad Industrial Estate", type: "Industrial", status: "Approved",
+    address: "Ambad MIDC, Plot B-73", city: "Nashik", region: "Nashik", lat: 19.9975, lng: 73.7898,
+    area: 154000, plotSize: "3.6 acres", yearBuilt: 2016, condition: "Good", surveyor: surveyors[3],
+    surveyDate: "2026-05-28", lastUpdated: "2026-06-18", valuation: 398000000, confidence: 88, progress: 100,
+    coverSeed: "nashikambad",
+    summary: "Established manufacturing unit in Ambad MIDC, Nashik with office block and utilities. Well-maintained asset with good compliance record and steady tenant covenant.",
   },
   {
-    id: "STE-4690", reference: "STE-4690", name: "Nashik Wine Park Commercial", type: "Commercial", status: "In Review",
-    address: "Ambad Industrial Area, Ambad", city: "Nashik", region: "Nashik", lat: 19.9975, lng: 73.7898,
-    area: 74200, plotSize: "1.4 acres", yearBuilt: 2018, condition: "Excellent", surveyor: surveyors[2],
-    surveyDate: "2026-06-30", lastUpdated: "2026-07-06", valuation: 297000000, confidence: 90, progress: 58,
-    coverSeed: "nashik",
-    summary: "Purpose-built processing and office facility in Ambad, Nashik let to a single food & beverage tenant. High-specification services and good compliance record.",
+    id: "STE-4690", reference: "STE-4690", name: "Nagpur MIHAN Logistics Park", type: "Industrial", status: "In Review",
+    address: "MIHAN SEZ, Khapri, Nagpur", city: "Nagpur", region: "Nagpur", lat: 21.1, lng: 79.05,
+    area: 265000, plotSize: "8.4 acres", yearBuilt: 2020, condition: "Excellent", surveyor: surveyors[2],
+    surveyDate: "2026-06-30", lastUpdated: "2026-07-06", valuation: 610000000, confidence: 90, progress: 58,
+    coverSeed: "nagpurmihan",
+    summary: "Grade-A logistics park within the MIHAN SEZ, Nagpur with multi-modal connectivity to air and rail cargo. High-specification build and strong central-India distribution demand.",
   },
   {
-    id: "STE-4663", reference: "STE-4663", name: "Kolhapur Heritage Wada", type: "Mixed Use", status: "Archived",
-    address: "Rajarampuri, 4th Lane", city: "Kolhapur", region: "Kolhapur", lat: 16.705, lng: 74.2433,
-    area: 51800, plotSize: "1.1 acres", yearBuilt: 1912, condition: "Poor", surveyor: surveyors[1],
-    surveyDate: "2026-04-14", lastUpdated: "2026-05-02", valuation: 128000000, confidence: 68, progress: 100,
-    coverSeed: "kolhapurwada",
-    summary: "Heritage wada structure in Rajarampuri with significant refurbishment liability. Valuation reflects redevelopment potential subject to heritage and structural constraints.",
+    id: "STE-4663", reference: "STE-4663", name: "Chh. Sambhajinagar Land Parcel", type: "Land", status: "Archived",
+    address: "Waluj, Chh. Sambhajinagar", city: "Chh. Sambhajinagar", region: "Chh. Sambhajinagar", lat: 19.83, lng: 75.24,
+    area: 320000, plotSize: "7.3 acres", yearBuilt: 0, condition: "Good", surveyor: surveyors[1],
+    surveyDate: "2026-04-14", lastUpdated: "2026-05-02", valuation: 132000000, confidence: 74, progress: 100,
+    coverSeed: "sambhajinagarland",
+    summary: "Non-agricultural land parcel adjoining the Waluj industrial belt, Chhatrapati Sambhajinagar. Suitable for warehousing subject to zone conversion; clear title and road frontage confirmed.",
   },
 ];
 
@@ -220,14 +232,14 @@ function inspectionFor(seed: SiteSeed): Site["inspection"] {
 
 // Cadastral / land-record particulars per site (Gat/Survey no. + village)
 const landExtra: Record<string, { surveyNo: string; village: string }> = {
-  "STE-4821": { surveyNo: "Gat No. 142/2B", village: "Kharabwadi, Chakan" },
-  "STE-4796": { surveyNo: "Survey No. 87/1A", village: "Man, Mulshi" },
-  "STE-4772": { surveyNo: "CTS No. 263/4", village: "Kothrud, Pune" },
-  "STE-4755": { surveyNo: "Gat No. 19/3C", village: "Wagholi, Haveli" },
-  "STE-4731": { surveyNo: "Survey No. 311/2", village: "Waluj, Gangapur" },
-  "STE-4708": { surveyNo: "Gat No. 405/7", village: "Nira, Baramati" },
-  "STE-4690": { surveyNo: "Survey No. 58/1B", village: "Ambad, Nashik" },
-  "STE-4663": { surveyNo: "CTS No. 224/6", village: "Rajarampuri, Kolhapur" },
+  "STE-4821": { surveyNo: "CTS No. 1123/A", village: "Indira Dock, Mumbai" },
+  "STE-4796": { surveyNo: "Plot No. E-42, MIDC", village: "Shiroli, Kolhapur" },
+  "STE-4772": { surveyNo: "Gat No. 214/2", village: "Mundhwa, Pune" },
+  "STE-4755": { surveyNo: "Plot No. C-18, MIDC", village: "Kupwad, Sangli" },
+  "STE-4731": { surveyNo: "Gat No. 88/1", village: "Powai Naka, Satara" },
+  "STE-4708": { surveyNo: "Plot No. B-73, MIDC", village: "Ambad, Nashik" },
+  "STE-4690": { surveyNo: "MIHAN Plot No. 12", village: "Khapri, Nagpur" },
+  "STE-4663": { surveyNo: "Gat No. 405/7", village: "Waluj, Chh. Sambhajinagar" },
 };
 
 function stageFromProgress(p: number): WorkflowStage {
@@ -303,12 +315,12 @@ export function getSite(id: string): Site | undefined {
 }
 
 export const activity: ActivityEvent[] = [
-  { id: "a1", actor: "Snehal Patil", action: { en: "updated the valuation —", mr: "ने मूल्यांकन अद्यतनित केले —" }, target: "Hinjawadi IT Commercial Tower", time: { en: "2 hours ago", mr: "२ तासांपूर्वी" }, type: "updated" },
-  { id: "a2", actor: "Aarti Deshmukh", action: { en: "approved —", mr: "ने मंजूर केले —" }, target: "Chakan Logistics Park", time: { en: "5 hours ago", mr: "५ तासांपूर्वी" }, type: "approved" },
-  { id: "a3", actor: "Ganesh Pawar", action: { en: "uploaded 8 photos —", mr: "ने ८ फोटो अपलोड केले —" }, target: "Wagholi Mixed-Use Township", time: { en: "Yesterday", mr: "काल" }, type: "upload" },
-  { id: "a4", actor: "Rohan Kulkarni", action: { en: "logged a structural defect —", mr: "ने संरचनात्मक दोष नोंदवला —" }, target: "Waluj MIDC Industrial Estate", time: { en: "Yesterday", mr: "काल" }, type: "comment" },
-  { id: "a5", actor: "Snehal Patil", action: { en: "created a new survey —", mr: "ने नवीन सर्वेक्षण तयार केले —" }, target: "Nashik Wine Park Commercial", time: { en: "2 days ago", mr: "२ दिवसांपूर्वी" }, type: "created" },
-  { id: "a6", actor: "Aarti Deshmukh", action: { en: "requested a review —", mr: "ने पुनरावलोकनाची विनंती केली —" }, target: "Nashik Wine Park Commercial", time: { en: "3 days ago", mr: "३ दिवसांपूर्वी" }, type: "comment" },
+  { id: "a1", actor: "Snehal Patil", action: { en: "updated the valuation —", mr: "ने मूल्यांकन अद्यतनित केले —" }, target: "Kolhapur MIDC Engineering Unit", time: { en: "2 hours ago", mr: "२ तासांपूर्वी" }, type: "updated" },
+  { id: "a2", actor: "Aarti Deshmukh", action: { en: "approved —", mr: "ने मंजूर केले —" }, target: "Mumbai Port Warehouse", time: { en: "5 hours ago", mr: "५ तासांपूर्वी" }, type: "approved" },
+  { id: "a3", actor: "Ganesh Pawar", action: { en: "uploaded 8 photos —", mr: "ने ८ फोटो अपलोड केले —" }, target: "Sangli Industrial Plot", time: { en: "Yesterday", mr: "काल" }, type: "upload" },
+  { id: "a4", actor: "Rohan Kulkarni", action: { en: "logged a structural defect —", mr: "ने संरचनात्मक दोष नोंदवला —" }, target: "Satara Highway Commercial Site", time: { en: "Yesterday", mr: "काल" }, type: "comment" },
+  { id: "a5", actor: "Snehal Patil", action: { en: "created a new survey —", mr: "ने नवीन सर्वेक्षण तयार केले —" }, target: "Nagpur MIHAN Logistics Park", time: { en: "2 days ago", mr: "२ दिवसांपूर्वी" }, type: "created" },
+  { id: "a6", actor: "Aarti Deshmukh", action: { en: "requested a review —", mr: "ने पुनरावलोकनाची विनंती केली —" }, target: "Nagpur MIHAN Logistics Park", time: { en: "3 days ago", mr: "३ दिवसांपूर्वी" }, type: "comment" },
 ];
 
 // ---- Dashboard aggregates -------------------------------------------------

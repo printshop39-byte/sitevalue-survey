@@ -8,6 +8,7 @@ import {
   Building2,
   ChevronsUpDown,
   FileText,
+  Info,
   KeyRound,
   Landmark,
   LayoutDashboard,
@@ -27,6 +28,7 @@ import { useI18n } from "@/components/i18n-provider";
 import { useAuth, useRequireAuth, type Role } from "@/components/auth-provider";
 import { ClientLogo } from "@/components/client-logo";
 import { LanguageToggle } from "@/components/language-toggle";
+import { AboutDialog } from "@/components/about-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -159,6 +161,17 @@ function SidebarBody({
             </p>
           </div>
         </div>
+
+        {/* Vendor branding */}
+        <div className="rounded-lg bg-white/5 px-3 py-2 text-center leading-tight">
+          <p className="text-[11px] font-semibold tracking-wide text-sidebar-foreground/90">
+            K D SOFT
+          </p>
+          <p className="text-[10px] text-sidebar-foreground/50">{t.common.owner}</p>
+          <p className="mt-0.5 text-[10px] text-sidebar-foreground/50">
+            {t.common.version} · {t.common.preparedForDemo}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -171,6 +184,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth();
   const { user, ready, allowed } = useRequireAuth();
   const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   // Block rendering until auth is resolved to avoid a flash of protected UI.
   if (!ready || !allowed || !user) {
@@ -259,6 +273,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem>
                   <Settings className="h-4 w-4" /> {t.user.preferences}
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setAboutOpen(true)}>
+                  <Info className="h-4 w-4" /> {t.about.menu}
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut}>
                   <LogOut className="h-4 w-4" /> {t.user.signout}
@@ -270,6 +287,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <main className="min-h-[calc(100vh-4rem)]">{children}</main>
       </div>
+
+      <AboutDialog open={aboutOpen} onOpenChange={setAboutOpen} />
     </div>
   );
 }

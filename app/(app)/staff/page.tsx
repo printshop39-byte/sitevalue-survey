@@ -23,17 +23,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { staffSeed, type StaffMember, type StaffRole } from "@/lib/mock-data";
+import { staffSeed, type StaffMember } from "@/lib/mock-data";
 import { initials } from "@/lib/utils";
 import { useI18n } from "@/components/i18n-provider";
 import { useRequireAuth } from "@/components/auth-provider";
-
-const roleVariant: Record<StaffRole, "default" | "success" | "warning" | "muted" | "secondary"> = {
-  "Super Admin": "default",
-  Manager: "warning",
-  Surveyor: "secondary",
-  Staff: "muted",
-};
 
 export default function StaffPage() {
   const { t, fill } = useI18n();
@@ -41,14 +34,6 @@ export default function StaffPage() {
   const [members, setMembers] = useState<StaffMember[]>(() => [...staffSeed]);
 
   if (!allowed) return null;
-
-  const roleLabel = (r: StaffRole) =>
-    ({
-      "Super Admin": t.staff.roleSuperAdmin,
-      Staff: t.staff.roleStaff,
-      Surveyor: t.staff.roleSurveyor,
-      Manager: t.staff.roleManager,
-    })[r];
 
   const toggleStatus = (id: string) =>
     setMembers((m) =>
@@ -90,6 +75,7 @@ export default function StaffPage() {
                   <TableHead>{t.staff.colEmail}</TableHead>
                   <TableHead>{t.staff.colMobile}</TableHead>
                   <TableHead>{t.staff.colRole}</TableHead>
+                  <TableHead>{t.staff.colAccess}</TableHead>
                   <TableHead>{t.staff.colStatus}</TableHead>
                   <TableHead className="text-right">{t.staff.colAction}</TableHead>
                 </TableRow>
@@ -113,8 +99,13 @@ export default function StaffPage() {
                     <TableCell className="whitespace-nowrap font-mono text-xs text-muted-foreground">
                       {s.mobile}
                     </TableCell>
+                    <TableCell className="whitespace-nowrap text-sm">
+                      {s.role}
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={roleVariant[s.role]}>{roleLabel(s.role)}</Badge>
+                      <Badge variant={s.access === "Admin" ? "default" : "muted"}>
+                        {s.access === "Admin" ? t.staff.accessAdmin : t.staff.accessStaff}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <Badge
