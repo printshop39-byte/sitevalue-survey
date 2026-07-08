@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn, formatDate } from "@/lib/utils";
-import { t, tDocType } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 const typeMeta: Record<
   DocumentType,
@@ -54,6 +54,7 @@ const filters: (DocumentType | "All")[] = [
 ];
 
 export function DocumentList({ documents }: { documents: SiteDocument[] }) {
+  const { t, tDocType } = useI18n();
   const [type, setType] = useState<(typeof filters)[number]>("All");
   const [query, setQuery] = useState("");
 
@@ -97,7 +98,8 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
         </div>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -165,6 +167,7 @@ export function DocumentList({ documents }: { documents: SiteDocument[] }) {
             })}
           </TableBody>
         </Table>
+        </div>
         {filtered.length === 0 && (
           <div className="py-16 text-center text-sm text-muted-foreground">
             {t.documents.noDocs}

@@ -110,7 +110,12 @@
   }
 }
 
-/* Print preview */
+/* Print preview — A4 report */
+@page {
+  size: A4;
+  margin: 14mm 14mm 20mm;
+}
+
 @media print {
   .no-print {
     display: none !important;
@@ -119,8 +124,26 @@
     box-shadow: none !important;
     margin: 0 !important;
     border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    color: #000;
   }
   body {
     background: #fff !important;
+  }
+  /* Repeat the confidential footer at the bottom of every printed page. */
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+    padding-top: 4px;
+    background: #fff;
+  }
+  /* Keep images and colours crisp when printing. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

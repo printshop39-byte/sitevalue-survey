@@ -6,11 +6,12 @@ import type { Photo } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn, formatDate } from "@/lib/utils";
-import { t, tPhotoCat } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 const categories = ["All", "Exterior", "Interior", "Structural", "Site", "Defect"] as const;
 
 export function PhotoGallery({ photos }: { photos: Photo[] }) {
+  const { t, tPhotoCat } = useI18n();
   const [category, setCategory] =
     useState<(typeof categories)[number]>("All");
   const [active, setActive] = useState<number | null>(null);

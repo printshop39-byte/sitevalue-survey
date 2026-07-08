@@ -45,14 +45,21 @@ export interface SiteDocument {
 }
 
 export interface ValuationLine {
-  label: string;
+  /** Stable key translated at render time via the i18n breakdown map. */
+  key: string;
   amount: number;
 }
 
 export interface InspectionItem {
-  category: string;
+  /** Stable key translated at render time via the i18n inspection map. */
+  key: string;
   condition: ConditionRating;
-  notes: string;
+}
+
+/** A bilingual string used by mock data (activity feed, etc.). */
+export interface I18nString {
+  en: string;
+  mr: string;
 }
 
 export interface Site {
@@ -91,8 +98,8 @@ export interface Site {
 export interface ActivityEvent {
   id: string;
   actor: string;
-  action: string;
+  action: I18nString;
   target: string;
-  time: string;
+  time: I18nString;
   type: "created" | "updated" | "approved" | "comment" | "upload";
 }

@@ -1,9 +1,12 @@
+"use client";
+
 import { Check } from "lucide-react";
 import type { TimelineStep } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
-import { t } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 export function SiteTimeline({ steps }: { steps: TimelineStep[] }) {
+  const { t } = useI18n();
   const activeIdx = steps.findIndex((s) => !s.done);
 
   return (

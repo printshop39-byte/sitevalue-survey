@@ -1,11 +1,14 @@
+"use client";
+
 import { FileText, Hash, Images, MapPin, Maximize, Trees } from "lucide-react";
 import type { Site } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkflowBadge } from "@/components/status-badge";
 import { formatNumber } from "@/lib/utils";
-import { t } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 export function SiteSummaryCard({ site }: { site: Site }) {
+  const { t } = useI18n();
   const rows: { icon: typeof Hash; label: string; value: string }[] = [
     { icon: Hash, label: t.summary.surveyNo, value: site.surveyNo },
     { icon: Trees, label: t.summary.village, value: site.village },
@@ -15,8 +18,8 @@ export function SiteSummaryCard({ site }: { site: Site }) {
       label: t.summary.coordinates,
       value: `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`,
     },
-    { icon: Images, label: t.summary.photographs, value: `${site.photos.length} फाइल्स` },
-    { icon: FileText, label: t.summary.documents, value: `${site.documents.length} फाइल्स` },
+    { icon: Images, label: t.summary.photographs, value: `${site.photos.length} ${t.summary.files}` },
+    { icon: FileText, label: t.summary.documents, value: `${site.documents.length} ${t.summary.files}` },
   ];
 
   return (

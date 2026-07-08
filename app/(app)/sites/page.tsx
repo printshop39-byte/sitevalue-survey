@@ -10,9 +10,11 @@ import {
   MapPin,
   Plus,
   Search,
+  SearchX,
   SlidersHorizontal,
 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
 import { StatusBadge, ConditionBadge, WorkflowBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +32,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { sites } from "@/lib/mock-data";
 import type { SiteStatus, SiteType } from "@/lib/types";
 import { cn, formatCurrency, formatNumber, initials } from "@/lib/utils";
-import { t, tStatus, tType } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 const statuses: (SiteStatus | "All")[] = [
   "All",
@@ -50,10 +52,17 @@ const types: (SiteType | "All")[] = [
 ];
 
 export default function SitesPage() {
+  const { t, tStatus, tType, fill } = useI18n();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<(typeof statuses)[number]>("All");
   const [type, setType] = useState<(typeof types)[number]>("All");
   const [view, setView] = useState<"table" | "grid">("table");
+
+  const resetFilters = () => {
+    setQuery("");
+    setStatus("All");
+    setType("All");
+  };
 
   const filtered = useMemo(() => {
     return sites.filter((s) => {
@@ -73,18 +82,23 @@ export default function SitesPage() {
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
         title={t.sites.title}
-        description={`पोर्टफोलिओमध्ये ${sites.length} साइट्स · ${formatCurrency(
-          sites.reduce((s, x) => s + x.valuation, 0),
-          true
-        )} एकूण मूल्य`}
+        description={fill(t.sites.subtitle, {
+          count: sites.length,
+          value: formatCurrency(
+            sites.reduce((s, x) => s + x.valuation, 0),
+            true
+          ),
+        })}
         crumbs={[{ label: t.brand.workspace, href: "/dashboard" }, { label: t.sites.title }]}
         actions={
           <>
             <Button variant="outline">
               <Download className="h-4 w-4" /> {t.common.export}
             </Button>
-            <Button>
-              <Plus className="h-4 w-4" /> {t.common.newSurvey}
+            <Button asChild>
+              <Link href="/sites/new">
+                <Plus className="h-4 w-4" /> {t.common.newSite}
+              </Link>
             </Button>
           </>
         }
@@ -169,13 +183,26 @@ export default function SitesPage() {
           </button>
         ))}
         <span className="ml-auto self-center text-sm text-muted-foreground">
-          {filtered.length} निकाल
+          {filtered.length} {t.common.results}
         </span>
       </div>
 
       {/* Results */}
       {view === "table" ? (
-        <Card>
+        filtered.length === 0 ? (
+          <EmptyState
+            icon={SearchX}
+            title={t.sites.noResults}
+            description={t.sites.noResultsHint}
+            action={
+              <Button variant="outline" size="sm" onClick={resetFilters}>
+                {t.common.clearFilters}
+              </Button>
+            }
+          />
+        ) : (
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -239,12 +266,20 @@ export default function SitesPage() {
               ))}
             </TableBody>
           </Table>
-          {filtered.length === 0 && (
-            <div className="py-16 text-center text-sm text-muted-foreground">
-              {t.sites.noResults}
-            </div>
-          )}
+          </div>
         </Card>
+        )
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          icon={SearchX}
+          title={t.sites.noResults}
+          description={t.sites.noResultsHint}
+          action={
+            <Button variant="outline" size="sm" onClick={resetFilters}>
+              {t.common.clearFilters}
+            </Button>
+          }
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((site) => (

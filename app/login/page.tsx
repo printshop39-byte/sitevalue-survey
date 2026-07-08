@@ -14,12 +14,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { t } from "@/lib/i18n";
-
-const highlights = t.login.highlights;
+import { ClientLogo } from "@/components/client-logo";
+import { LanguageToggle } from "@/components/language-toggle";
+import { useI18n } from "@/components/i18n-provider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useI18n();
+  const highlights = t.login.highlights;
   const [loading, setLoading] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
@@ -81,11 +83,12 @@ export default function LoginPage() {
       {/* Form panel */}
       <div className="flex items-center justify-center bg-background px-6 py-12">
         <div className="w-full max-w-sm">
-          <div className="mb-8 flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <ShieldCheck className="h-5 w-5 text-white" />
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 lg:invisible">
+              <ClientLogo className="h-9 w-9" />
+              <span className="text-lg font-semibold">SiteValue</span>
             </div>
-            <span className="text-lg font-semibold">SiteValue</span>
+            <LanguageToggle />
           </div>
 
           <div className="mb-8 space-y-1.5">

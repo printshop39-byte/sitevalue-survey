@@ -8,19 +8,20 @@ import {
   Building2,
   ChevronsUpDown,
   FileText,
-  Images,
   LayoutDashboard,
   LogOut,
   Map,
   Menu,
   Search,
   Settings,
-  ShieldCheck,
+  Upload,
   UserCircle,
 } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
 import { currentUser } from "@/lib/mock-data";
-import { t } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
+import { ClientLogo } from "@/components/client-logo";
+import { LanguageToggle } from "@/components/language-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -34,27 +35,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const nav = [
-  { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
-  { href: "/sites", label: t.nav.sites, icon: Building2 },
-  { href: "/map", label: t.nav.map, icon: Map },
-  { href: "/reports", label: t.nav.reports, icon: FileText },
-];
-
-const secondaryNav = [
-  { href: "/settings", label: t.nav.settings, icon: Settings },
-];
-
 function SidebarBody({ pathname }: { pathname: string }) {
+  const { t } = useI18n();
+  const nav = [
+    { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
+    { href: "/sites", label: t.nav.sites, icon: Building2 },
+    { href: "/map", label: t.nav.map, icon: Map },
+    { href: "/upload", label: t.nav.upload, icon: Upload },
+    { href: "/reports", label: t.nav.reports, icon: FileText },
+  ];
+  const secondaryNav = [
+    { href: "/settings", label: t.nav.settings, icon: Settings },
+  ];
   const isActive = (href: string) =>
     href === "/dashboard" ? pathname === href : pathname.startsWith(href);
 
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center gap-2.5 border-b border-sidebar-border px-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-accent">
-          <ShieldCheck className="h-5 w-5 text-white" />
-        </div>
+        <ClientLogo className="h-8 w-8" />
         <div className="leading-tight">
           <p className="text-sm font-semibold text-sidebar-foreground">SiteValue</p>
           <p className="text-[11px] text-sidebar-foreground/60">{t.brand.subtitle}</p>
@@ -109,7 +108,10 @@ function SidebarBody({ pathname }: { pathname: string }) {
         })}
       </nav>
 
-      <div className="border-t border-sidebar-border p-3">
+      <div className="space-y-3 border-t border-sidebar-border p-3">
+        <div className="sm:hidden">
+          <LanguageToggle variant="ghost" className="w-full justify-center" />
+        </div>
         <div className="flex items-center gap-3 rounded-lg px-2 py-2">
           <Avatar className="h-9 w-9 border border-white/10">
             <AvatarFallback className="bg-sidebar-accent text-white">
@@ -132,6 +134,7 @@ function SidebarBody({ pathname }: { pathname: string }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
 
   return (
@@ -165,6 +168,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="ml-auto flex items-center gap-1.5">
+            <LanguageToggle className="hidden sm:inline-flex" />
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive ring-2 ring-background" />

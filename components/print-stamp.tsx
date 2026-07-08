@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { t } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 /**
  * Official-style print stamp: Printed On / Printed By / Document Version /
@@ -19,6 +19,7 @@ export function PrintStamp({
   page?: number;
   totalPages?: number;
 }) {
+  const { t } = useI18n();
   const [stamp, setStamp] = useState("—");
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function PrintStamp({
       {cell(t.print.printedOn, stamp)}
       {cell(t.print.printedBy, printedBy)}
       {cell(t.print.version, version)}
-      {cell(t.print.page, `${totalPages} पैकी ${page}`)}
+      {cell(t.print.page, `${page} ${t.common.of} ${totalPages}`)}
     </div>
   );
 }

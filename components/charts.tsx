@@ -1,5 +1,7 @@
+"use client";
+
 import { cn, formatCurrency } from "@/lib/utils";
-import { t, tStatus, tType } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 import type { SiteStatus, SiteType } from "@/lib/types";
 
 const PALETTE = [
@@ -17,6 +19,7 @@ export function ValuationBars({
 }: {
   data: { label: string; value: number }[];
 }) {
+  const { tType } = useI18n();
   const max = Math.max(...data.map((d) => d.value));
   return (
     <div className="space-y-4">
@@ -50,6 +53,7 @@ export function StatusDonut({
 }: {
   data: { label: string; value: number }[];
 }) {
+  const { t, tStatus } = useI18n();
   const total = data.reduce((s, d) => s + d.value, 0) || 1;
   const radius = 60;
   const circ = 2 * Math.PI * radius;

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { MapPin, Printer, Share2, Star } from "lucide-react";
 import type { Site } from "@/lib/types";
@@ -5,9 +7,10 @@ import { StatusBadge, ConditionBadge, WorkflowBadge } from "@/components/status-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
-import { t, tType } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 export function SiteHero({ site }: { site: Site }) {
+  const { t, tType } = useI18n();
   return (
     <div className="relative overflow-hidden rounded-xl border">
       <div className="absolute inset-0">

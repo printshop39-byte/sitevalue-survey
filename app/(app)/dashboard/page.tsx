@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowRight,
@@ -35,7 +37,7 @@ import {
   valuationTrend,
 } from "@/lib/mock-data";
 import { formatCurrency, formatNumber, initials } from "@/lib/utils";
-import { t, tStatus, tType } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 const activityIcon = {
   updated: CircleDollarSign,
@@ -46,6 +48,7 @@ const activityIcon = {
 };
 
 export default function DashboardPage() {
+  const { t, tStatus, tType, locale } = useI18n();
   const recent = [...sites]
     .sort((a, b) => b.lastUpdated.localeCompare(a.lastUpdated))
     .slice(0, 5);
@@ -67,9 +70,9 @@ export default function DashboardPage() {
         </div>
         <div className="text-left sm:text-right">
           <p className="text-xs uppercase tracking-wide text-muted-foreground">
-            Workspace
+            {t.brand.workspace}
           </p>
-          <p className="text-sm font-medium">Survey &amp; Valuation Portal</p>
+          <p className="text-sm font-medium">SiteValue · {t.brand.subtitle}</p>
         </div>
       </div>
 
@@ -82,7 +85,7 @@ export default function DashboardPage() {
               <FileCheck2 className="h-4 w-4" /> {t.common.export}
             </Button>
             <Button asChild>
-              <Link href="/sites">
+              <Link href="/sites/new">
                 <Plus className="h-4 w-4" /> {t.common.newSurvey}
               </Link>
             </Button>
@@ -99,6 +102,7 @@ export default function DashboardPage() {
           trend={{ value: "8.2%", positive: true }}
           hint={t.dashboard.vsQuarter}
           accent="primary"
+          spark={valuationTrend.map((d) => d.value)}
         />
         <KpiCard
           label={t.dashboard.kpiSites}
@@ -107,6 +111,7 @@ export default function DashboardPage() {
           trend={{ value: `3 ${t.dashboard.newN}`, positive: true }}
           hint={t.dashboard.newThisMonth}
           accent="success"
+          spark={[3, 4, 4, 5, 6, 7, 8]}
         />
         <KpiCard
           label={t.dashboard.kpiPending}
@@ -114,6 +119,7 @@ export default function DashboardPage() {
           icon={ClipboardCheck}
           hint={`${portfolioStats.inReview} ${tStatus["In Review"]} · ${portfolioStats.draft} ${tStatus.Draft}`}
           accent="warning"
+          spark={[6, 5, 5, 4, 5, 4, 4]}
         />
         <KpiCard
           label={t.dashboard.kpiConfidence}
@@ -122,6 +128,7 @@ export default function DashboardPage() {
           trend={{ value: "2.1%", positive: true }}
           hint={t.dashboard.modelAccuracy}
           accent="primary"
+          spark={[79, 81, 82, 84, 85, 86, portfolioStats.avgConfidence]}
         />
       </div>
 
@@ -251,10 +258,10 @@ export default function DashboardPage() {
                   <div className="flex-1 text-sm">
                     <p>
                       <span className="font-medium">{ev.actor}</span>{" "}
-                      <span className="text-muted-foreground">{ev.action}</span>{" "}
+                      <span className="text-muted-foreground">{ev.action[locale]}</span>{" "}
                       <span className="font-medium">{ev.target}</span>
                     </p>
-                    <p className="text-xs text-muted-foreground">{ev.time}</p>
+                    <p className="text-xs text-muted-foreground">{ev.time[locale]}</p>
                   </div>
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
                     <Icon className="h-3.5 w-3.5" />

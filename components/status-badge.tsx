@@ -1,8 +1,10 @@
-import { Badge } from "@/components/ui/badge";
-import type { ConditionRating, SiteStatus, WorkflowStage } from "@/lib/types";
-import { tCondition, tStage, tStatus } from "@/lib/i18n";
+"use client";
 
-const statusMap: Record<SiteStatus, { variant: "default" | "success" | "warning" | "muted"; dot: string }> = {
+import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/components/i18n-provider";
+import type { ConditionRating, SiteStatus, WorkflowStage } from "@/lib/types";
+
+const statusVariant: Record<SiteStatus, { variant: "default" | "success" | "warning" | "muted"; dot: string }> = {
   Approved: { variant: "success", dot: "bg-success" },
   "In Review": { variant: "warning", dot: "bg-warning" },
   Draft: { variant: "default", dot: "bg-primary" },
@@ -10,7 +12,8 @@ const statusMap: Record<SiteStatus, { variant: "default" | "success" | "warning"
 };
 
 export function StatusBadge({ status }: { status: SiteStatus }) {
-  const s = statusMap[status];
+  const { tStatus } = useI18n();
+  const s = statusVariant[status];
   return (
     <Badge variant={s.variant} className="gap-1.5 pl-2">
       <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
@@ -19,7 +22,7 @@ export function StatusBadge({ status }: { status: SiteStatus }) {
   );
 }
 
-const conditionMap: Record<ConditionRating, "success" | "default" | "warning" | "destructive"> = {
+const conditionVariant: Record<ConditionRating, "success" | "default" | "warning" | "destructive"> = {
   Excellent: "success",
   Good: "default",
   Fair: "warning",
@@ -27,10 +30,11 @@ const conditionMap: Record<ConditionRating, "success" | "default" | "warning" | 
 };
 
 export function ConditionBadge({ condition }: { condition: ConditionRating }) {
-  return <Badge variant={conditionMap[condition]}>{tCondition[condition]}</Badge>;
+  const { tCondition } = useI18n();
+  return <Badge variant={conditionVariant[condition]}>{tCondition[condition]}</Badge>;
 }
 
-const stageMap: Record<
+const stageVariant: Record<
   WorkflowStage,
   "muted" | "warning" | "default" | "success"
 > = {
@@ -42,5 +46,6 @@ const stageMap: Record<
 };
 
 export function WorkflowBadge({ stage }: { stage: WorkflowStage }) {
-  return <Badge variant={stageMap[stage]}>{tStage[stage]}</Badge>;
+  const { tStage } = useI18n();
+  return <Badge variant={stageVariant[stage]}>{tStage[stage]}</Badge>;
 }

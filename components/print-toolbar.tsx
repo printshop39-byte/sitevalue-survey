@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { ArrowLeft, Download, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { t } from "@/lib/i18n";
+import { LanguageToggle } from "@/components/language-toggle";
+import { useI18n } from "@/components/i18n-provider";
 
 export function PrintToolbar({ backHref }: { backHref: string }) {
+  const { t } = useI18n();
   return (
     <div className="no-print sticky top-0 z-10 border-b bg-background/90 backdrop-blur">
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3">
@@ -15,6 +17,7 @@ export function PrintToolbar({ backHref }: { backHref: string }) {
           </Link>
         </Button>
         <div className="flex items-center gap-2">
+          <LanguageToggle />
           <Button variant="outline" size="sm" onClick={() => window.print()}>
             <Download className="h-4 w-4" /> {t.print.savePdf}
           </Button>

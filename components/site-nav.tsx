@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, Images, LayoutPanelTop } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { t } from "@/lib/i18n";
+import { useI18n } from "@/components/i18n-provider";
 
 export function SiteNav({ id }: { id: string }) {
   const pathname = usePathname();
+  const { t } = useI18n();
   const base = `/sites/${id}`;
   const tabs = [
     { href: base, label: t.siteNav.overview, icon: LayoutPanelTop },
@@ -17,13 +18,13 @@ export function SiteNav({ id }: { id: string }) {
 
   return (
     <div className="flex gap-1 overflow-x-auto border-b">
-      {tabs.map((t) => {
-        const Icon = t.icon;
-        const active = pathname === t.href;
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        const active = pathname === tab.href;
         return (
           <Link
-            key={t.href}
-            href={t.href}
+            key={tab.href}
+            href={tab.href}
             className={cn(
               "flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors",
               active
@@ -32,7 +33,7 @@ export function SiteNav({ id }: { id: string }) {
             )}
           >
             <Icon className="h-4 w-4" />
-            {t.label}
+            {tab.label}
           </Link>
         );
       })}
