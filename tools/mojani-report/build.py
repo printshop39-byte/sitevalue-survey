@@ -137,12 +137,13 @@ def valuation_section():
                    'प्रत्येकी <strong>₹%s</strong>.</p>'%(common,inr(cr['asr_value']),len(shares),
                                                           inr(cr['asr_value']/len(shares))))
     src=[]
-    if asr: src.append('शासकीय दर ₹%s/चौ.मी. — %s'%(inr(asr),cfg.get('asr_source') or 'स्रोत नोंदवलेला नाही'))
+    if asr: src.append('शासकीय दर ₹%s प्रति चौ.मी. (≈ ₹%s प्रति चौ.फूट) — %s'
+                       %(inr(asr),inr(asr/10.7639),cfg.get('asr_source') or 'स्रोत नोंदवलेला नाही'))
     if mkt: src.append('बाजार दर ₹%s/चौ.फूट — %s'%(inr(mkt),cfg.get('market_source') or 'स्रोत नोंदवलेला नाही'))
     return ("""<section>
  <div class="sec-head">
   <h2>मूल्यांकन (सूचक)</h2>
-  <p class="sub">%s</p>
+  <p class="sub">शासकीय दरावर आधारित पोटहिस्सानिहाय मूल्य.</p>
  </div>
  <div class="tbl-wrap"><table>
   <caption>पोटहिस्सानिहाय मूल्य</caption>
@@ -152,10 +153,11 @@ def valuation_section():
   <tfoot>%s</tfoot>
  </table></div>
  %s
+ <p class="sub"><strong>वापरलेला दर:</strong> %s</p>
  <p class="sub"><strong>अस्वीकरण:</strong> हे मूल्य सूचक (indicative) आहे. मुद्रांक शुल्कासाठीचे
  अधिकृत बाजारमूल्य नोंदणी व मुद्रांक विभागाच्या दर तक्त्यानुसार व शासनमान्य मूल्यांकनकर्त्याकडूनच ठरते.</p>
 </section>
-"""%(' · '.join(src),cols,body,foot,extra))
+"""%(cols,body,foot,extra,' · '.join(src)))
 
 VALUATION=valuation_section()
 

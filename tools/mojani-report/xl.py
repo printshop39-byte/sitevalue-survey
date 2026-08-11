@@ -75,6 +75,35 @@ sheet(ws3,'प्रत्येक पोटहिस्स्याची स�
  ['सि.स.नं.','बाजू','दिशा / प्रकार','लांबी (फूट)','लांबी (मी.)','लगत'],
  [[a,b,c,round(d*FT,2),d,e] for a,b,c,d,e in sub],[12,10,26,14,14,34])
 
+# --- मूल्यांकन (rates.json असल्यासच) ---
+import os, json
+if os.path.exists('rates.json'):
+    _cfg=json.load(open('rates.json',encoding='utf-8'))
+    if _cfg.get('asr_rate_per_sqm') or _cfg.get('market_rate_per_sqft'):
+        from valuation import compute
+        _rows,_tot=compute(_cfg)
+        wsv=wb.create_sheet('मूल्यांकन')
+        _hd=['सि.स.नं.','धारक','क्षेत्र (चौ.फूट)','क्षेत्र (चौ.मी.)','घटक']
+        if _cfg.get('asr_rate_per_sqm'): _hd.append('शासकीय मूल्य ₹')
+        if _cfg.get('market_rate_per_sqft'): _hd.append('बाजार मूल्य ₹')
+        _data=[]
+        for r in _rows:
+            row=[r['no'],r['holder'],round(r['sqft'],2),round(r['sqm'],2),r['factor']]
+            if _cfg.get('asr_rate_per_sqm'): row.append(round(r['asr_value']))
+            if _cfg.get('market_rate_per_sqft'): row.append(round(r['mkt_value']))
+            _data.append(row)
+        _ft=['एकूण','—',round(_tot['sqft'],2),round(_tot['sqm'],2),'']
+        if _cfg.get('asr_rate_per_sqm'): _ft.append(round(_tot['asr']))
+        if _cfg.get('market_rate_per_sqft'): _ft.append(round(_tot['mkt']))
+        _title='मूल्यांकन (सूचक) — शासकीय दर ₹%s/चौ.मी.'%_cfg.get('asr_rate_per_sqm','—')
+        sheet(wsv,_title,_hd,_data,[12,36,16,15,9,18,18],_ft)
+        wsv.append([])
+        wsv.append(['स्रोत',_cfg.get('asr_source','')])
+        wsv.append(['अस्वीकरण','हे मूल्य सूचक (indicative) आहे. मुद्रांक शुल्कासाठीचे अधिकृत बाजारमूल्य '
+                    'नोंदणी व मुद्रांक विभागाच्या दर तक्त्यानुसार व शासनमान्य मूल्यांकनकर्त्याकडूनच ठरते.'])
+        for _r in wsv.iter_rows(min_row=wsv.max_row-1,max_row=wsv.max_row):
+            _r[1].alignment=Alignment(wrap_text=True,vertical='top')
+
 ws4=wb.create_sheet('नोंदी')
 for r in [['मोजणी तपशील'],[],
  ['मौजे','हुपरी'],['तालुका','हातकणंगले'],['जिल्हा','कोल्हापूर'],
