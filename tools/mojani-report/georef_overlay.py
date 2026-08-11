@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 """मोजणी नकाशातील हद्द उपग्रह प्रतिमेवर बसवणे (georeferenced satellite overlay).
 
-मोजणी नकाशा स्थानिक ग्रिडवर असतो — त्यात अक्षांश-रेखांश नसतात. जागेवरून कोणत्याही
-दोन कोपऱ्यांचे GPS मिळाले की similarity transform (scale + rotation + shift) काढून
-संपूर्ण हद्द अक्षांश-रेखांशात रूपांतरित करता येते. हीच गोष्ट ही स्क्रिप्ट करते.
+मोजणी नकाशा स्थानिक ग्रिडवर असतो — त्यात अक्षांश-रेखांश नसतात. पण नकाशावर
+प्रमाण (1:500) आणि उत्तर दिशेचा बाण दिलेला असतो. म्हणजे scale व rotation आधीच माहीत
+असतात — फक्त "हा नकाशा पृथ्वीवर नेमका कुठे" एवढेच ठरवायचे उरते.
+
+दोन पद्धती:
+  anchor  — एकाच कोपऱ्याचे lat/lon पुरे. rotation नकाशाच्या उत्तर बाणावरून, scale 1:500 वरून.
+  २ बिंदू — दोन कोपऱ्यांचे lat/lon दिल्यास similarity transform काढून scale व rotation
+            पडताळले जातात. जास्त विश्वासार्ह; शक्य असल्यास हेच वापरा.
 
 वापर:
     python georef_overlay.py control.json --out overlay.png --geojson plot.geojson
@@ -93,19 +98,36 @@ def main():
     cfg = json.load(open(a.control, encoding='utf-8'))
     V = {k: tuple(v) for k, v in cfg['vertices_m'].items()}     # स्थानिक मीटर (X पूर्व, Y उत्तर)
     cps = cfg['control_points']
-    if len(cps) < 2:
-        raise SystemExit('किमान दोन GPS control बिंदू लागतात.')
-    names = [c['vertex'] for c in cps[:2]]
-    src = [V[n] for n in names]
-    dst = [ll2m(cps[i]['lat'], cps[i]['lon']) for i in range(2)]
-    T = solve_similarity(src, dst)
-    # Web Mercator अंतर अक्षांशानुसार फुगते; प्रत्यक्ष जमिनीवरील scale काढण्यासाठी ते मागे घ्या
-    ground = T.scale * math.cos(math.radians(cps[0]['lat']))
-    print('जमिनीवरील scale %.4f  ·  rotation %.3f°  (1.0000 म्हणजे नकाशा व GPS तंतोतंत जुळले)'
-          % (ground, T.rotation_deg))
-    if abs(ground - 1.0) > 0.02:
-        print('इशारा: scale 1.0000 पासून %.1f%% दूर आहे — GPS बिंदू किंवा कोपऱ्यांची नावे तपासा.'
-              % ((ground - 1) * 100), file=sys.stderr)
+    if not cps:
+        raise SystemExit('किमान एक GPS control बिंदू लागतो.')
+    lat0 = cps[0]['lat']
+    if len(cps) == 1:
+        # anchor पद्धत: rotation नकाशाच्या उत्तर बाणावरून, scale 1:500 वरून आधीच माहीत
+        n_off = math.radians(cfg.get('north_offset_deg', 0.0))
+        ax, ay = V[cps[0]['vertex']]
+        AX, AY = ll2m(lat0, cps[0]['lon'])
+        inv = 1.0 / math.cos(math.radians(lat0))     # ground मीटर → Web Mercator मीटर
+        ct, st = math.cos(n_off), math.sin(n_off)
+        def T(x, y):
+            dx, dy = (x - ax) * inv, (y - ay) * inv
+            return (AX + dx * ct - dy * st, AY + dx * st + dy * ct)
+        T.scale, T.rotation_deg = inv, math.degrees(n_off)
+        print('anchor पद्धत — बिंदू %s वर स्थिर, उत्तर बाणानुसार rotation %.2f°'
+              % (cps[0]['vertex'], cfg.get('north_offset_deg', 0.0)))
+        print('इशारा: एकाच GPS बिंदूवर आधारित — संपूर्ण हद्द त्या बिंदूइतकीच अचूक असेल '
+              '(मोबाईल GPS ± 3–5 मी.). शक्य असल्यास दुसरा बिंदू घेऊन पडताळा.', file=sys.stderr)
+    else:
+        names = [c['vertex'] for c in cps[:2]]
+        src = [V[n] for n in names]
+        dst = [ll2m(cps[i]['lat'], cps[i]['lon']) for i in range(2)]
+        T = solve_similarity(src, dst)
+        # Web Mercator अंतर अक्षांशानुसार फुगते; प्रत्यक्ष जमिनीवरील scale काढण्यासाठी ते मागे घ्या
+        ground = T.scale * math.cos(math.radians(lat0))
+        print('जमिनीवरील scale %.4f  ·  rotation %.3f°  (1.0000 म्हणजे नकाशा व GPS तंतोतंत जुळले)'
+              % (ground, T.rotation_deg))
+        if abs(ground - 1.0) > 0.02:
+            print('इशारा: scale 1.0000 पासून %.1f%% दूर आहे — GPS बिंदू किंवा कोपऱ्यांची नावे तपासा.'
+                  % ((ground - 1) * 100), file=sys.stderr)
 
     merc = {k: T(*p) for k, p in V.items()}
     parcels = cfg['parcels']
@@ -130,12 +152,18 @@ def main():
     from PIL import Image, ImageDraw, ImageFont
     z = a.zoom
     pts = [m2px(*merc[v], z) for v in merc]
-    mpp = 40075016.685578488 / (TILE * 2 ** z) * math.cos(math.radians(cps[0]['lat']))
+    mpp = 40075016.685578488 / (TILE * 2 ** z) * math.cos(math.radians(lat0))
     padpx = a.pad / mpp
     x0 = min(p[0] for p in pts) - padpx; x1 = max(p[0] for p in pts) + padpx
     y0 = min(p[1] for p in pts) - padpx; y1 = max(p[1] for p in pts) + padpx
-    url = cfg.get('tile_url',
-                  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')
+    PRESETS = {
+        # उपग्रह प्रतिमा
+        'esri':   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        'bhuvan': 'https://bhuvan-vec1.nrsc.gov.in/bhuvan/wms?...',   # ISRO — खाते व key लागते
+        # नकाशा (उपग्रह नव्हे) — OpenStreetMap कडे स्वतःची उपग्रह प्रतिमा नाही
+        'osm':    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    }
+    url = cfg.get('tile_url') or PRESETS.get(cfg.get('tiles', 'esri'), PRESETS['esri'])
     canvas, ox, oy = fetch_tiles((x0, y0, x1, y1), z, url, cfg.get('user_agent', 'sitevalue-survey/1.0'))
     img = canvas.crop((int(x0 - ox), int(y0 - oy), int(x1 - ox), int(y1 - oy))).convert('RGBA')
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))

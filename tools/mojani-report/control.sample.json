@@ -1,6 +1,6 @@
 {
  "_": "सि.स.नं. 2457, मौजे हुपरी, ता. हातकणंगले, जि. कोल्हापूर — मो.र.नं. 090729/2025",
- "_control_note": "खालील lat/lon हे फक्त नमुना (placeholder) आहेत. जागेवर बिंदू E व A या दोन कोपऱ्यांचे प्रत्यक्ष GPS घेऊन ते इथे भरा, मगच overlay अचूक येईल.",
+ "_control_note": "lat/lon नमुना (placeholder) आहेत — जागेवरील प्रत्यक्ष GPS ने बदला. एकच बिंदू दिला तर anchor पद्धत (नकाशाचा उत्तर बाण + 1:500 प्रमाण वापरून) चालते; दोन बिंदू दिले तर scale व rotation पडताळले जातात.",
  "vertices_m": {
   "A": [
    26.797,
@@ -128,7 +128,9 @@
    "_": "PLACEHOLDER — जागेवरील GPS ने बदला"
   }
  ],
- "tile_url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
  "attribution": "Imagery © Esri, Maxar, Earthstar Geographics",
- "user_agent": "sitevalue-survey/1.0 (contact: printshop39@gmail.com)"
+ "user_agent": "sitevalue-survey/1.0 (contact: printshop39@gmail.com)",
+ "north_offset_deg": 0.0,
+ "_north_offset_note": "नकाशाचा उत्तर बाण खऱ्या उत्तरेपासून किती अंश फिरला असल्यास इथे भरा (सहसा 0).",
+ "tiles": "esri"
 }
