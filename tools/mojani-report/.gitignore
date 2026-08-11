@@ -1,0 +1,8 @@
+# तयार होणाऱ्या फाइल्स — run.sh ने पुन्हा बनतात
+*.svg
+*.html
+*.pdf
+*.xlsx
+*.png
+*.geojson
+control.json
