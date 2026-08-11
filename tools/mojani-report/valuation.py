@@ -32,6 +32,24 @@ def inr(x):
         s = ','.join(parts) + ',' + tail
     return ('-' if neg else '') + s
 
+def compute(cfg):
+    """rates config → (rows, totals). CLI व अहवाल दोन्ही हेच वापरतात."""
+    asr = cfg.get('asr_rate_per_sqm')
+    mkt = cfg.get('market_rate_per_sqft')
+    rows, tot = [], {'sqm': 0.0, 'sqft': 0.0, 'asr': 0.0, 'mkt': 0.0}
+    for no, area in cfg['areas_sqm'].items():
+        f = cfg.get('factors', {}).get(no, 1.0)
+        sqft = area * SQFT
+        v_asr = area * asr * f if asr else None
+        v_mkt = sqft * mkt * f if mkt else None
+        rows.append({'no': no, 'holder': cfg.get('holders', {}).get(no, ''),
+                     'sqm': area, 'sqft': sqft, 'guntha': area / GUNTHA,
+                     'factor': f, 'asr_value': v_asr, 'mkt_value': v_mkt})
+        tot['sqm'] += area; tot['sqft'] += sqft
+        tot['asr'] += v_asr or 0.0; tot['mkt'] += v_mkt or 0.0
+    return rows, tot
+
+
 def main():
     ap = argparse.ArgumentParser(description='पोटहिस्सानिहाय मूल्यांकन तक्ता')
     ap.add_argument('rates', help='rates.json — क्षेत्र, दर व घटक')
@@ -44,20 +62,12 @@ def main():
     if not asr and not mkt:
         raise SystemExit('किमान एक दर द्या — asr_rate_per_sqm किंवा market_rate_per_sqft.')
 
-    rows, tot = [], {'sqm': 0.0, 'asr': 0.0, 'mkt': 0.0}
-    for no, area in cfg['areas_sqm'].items():
-        f = cfg.get('factors', {}).get(no, 1.0)      # रस्ता तोंड / आकार / सामाईक — वापरकर्त्याने ठरवायचे
-        sqft = area * SQFT
-        v_asr = area * asr * f if asr else None
-        v_mkt = sqft * mkt * f if mkt else None
-        rows.append({'सि.स.नं.': no, 'धारक': cfg.get('holders', {}).get(no, ''),
-                     'क्षेत्र_चौमी': round(area, 2), 'क्षेत्र_चौफूट': round(sqft, 2),
-                     'गुंठे': round(area / GUNTHA, 3), 'घटक': f,
-                     'शासकीय_मूल्य': round(v_asr) if v_asr else '',
-                     'बाजार_मूल्य': round(v_mkt) if v_mkt else ''})
-        tot['sqm'] += area
-        tot['asr'] += v_asr or 0
-        tot['mkt'] += v_mkt or 0
+    raw, tot = compute(cfg)
+    rows = [{'सि.स.नं.': r['no'], 'धारक': r['holder'],
+             'क्षेत्र_चौमी': round(r['sqm'], 2), 'क्षेत्र_चौफूट': round(r['sqft'], 2),
+             'गुंठे': round(r['guntha'], 3), 'घटक': r['factor'],
+             'शासकीय_मूल्य': round(r['asr_value']) if r['asr_value'] else '',
+             'बाजार_मूल्य': round(r['mkt_value']) if r['mkt_value'] else ''} for r in raw]
 
     w = max(len(r['सि.स.नं.']) for r in rows) + 2
     print('\n%-*s %12s %12s %8s %16s %16s' % (w, 'सि.स.नं.', 'चौ.मी.', 'चौ.फूट', 'घटक',

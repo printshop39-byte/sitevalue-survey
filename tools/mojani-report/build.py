@@ -2,7 +2,7 @@
 FT=3.28084; SQFT=10.7639; GUNTHA=101.17
 def ft(m): return '%.2f'%(m*FT)
 
-import sys
+import sys, os, json
 PORTRAIT='--portrait' in sys.argv
 plan=open('plan_portrait.svg' if PORTRAIT else 'plan.svg').read()
 iso=open('iso.svg').read()
@@ -79,6 +79,85 @@ for i,(no,d) in enumerate(SUB.items(),1):
   <div><dt>क्षेत्र</dt><dd>{d['area']*SQFT:,.2f} चौ.फूट <span class="alt">({d['area']/GUNTHA:.3f} गुंठे)</span></dd></div>
  </dl>
 </article>''')
+
+RATES_FILE=os.environ.get('RATES','rates.json')
+def valuation_section():
+    """rates.json मध्ये दर भरलेला असेल तरच पूर्ण मूल्यांकन तक्ता, अन्यथा काय हवे ते सांगणारा ब्लॉक."""
+    if not os.path.exists(RATES_FILE):
+        cfg=None
+    else:
+        cfg=json.load(open(RATES_FILE,encoding='utf-8'))
+    asr=(cfg or {}).get('asr_rate_per_sqm')
+    mkt=(cfg or {}).get('market_rate_per_sqft')
+    if not asr and not mkt:
+        return """<section>
+ <div class="sec-head">
+  <h2>मूल्यांकन (सूचक)</h2>
+  <p class="sub">क्षेत्रफळ निश्चित झाले आहे; मूल्य काढण्यासाठी फक्त दर भरायचा बाकी आहे.</p>
+ </div>
+ <div class="notes">
+  <h2>दर भरल्यावर हा विभाग आपोआप भरतो</h2>
+  <ol>
+   <li><strong>शासकीय दर (रेडी रेकनर / ASR).</strong> नोंदणी व मुद्रांक विभागाच्या त्या वर्षीच्या
+       वार्षिक बाजारमूल्य दर तक्त्यातून — मौजे हुपरी, ता. हातकणंगले या गावाच्या संबंधित झोनचा
+       <strong>खुल्या जमिनीचा दर ₹ प्रति चौ.मी.</strong> ही सि.स. (सिटी सर्व्हे) मिळकत असल्याने
+       झोन/उपझोन सि.स.नं. क्रमांकाच्या पट्ट्यानुसार ठरतो — तक्त्यात 2457 कोणत्या पट्ट्यात येतो ते पहावे.</li>
+   <li><strong>वर्ष.</strong> दर दरवर्षी 1 एप्रिलपासून बदलतो — अहवालात कोणत्या वर्षाचा दर वापरला ते नमूद होते.</li>
+   <li><strong>बाजार दर (ऐच्छिक).</strong> ₹ प्रति चौ.फूट — नोंदणीकृत दस्तांवरून किंवा स्थानिक व्यवहारांवरून.</li>
+   <li><strong>घटक (ऐच्छिक).</strong> रस्ता तोंड, आकार, सामाईक वापर यासाठी गुणक. काहीही गृहीत धरलेले नाही —
+       प्रत्येक गुणक तुम्हीच ठरवायचा.</li>
+  </ol>
+ </div>
+</section>
+"""
+    sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+    from valuation import compute, inr
+    rows,tot=compute(cfg)
+    cols='<th class="num">शासकीय मूल्य ₹</th>' if asr else ''
+    cols+='<th class="num">बाजार मूल्य ₹</th>' if mkt else ''
+    body=''
+    for r in rows:
+        body+=('<tr><td class="code">%s</td><td>%s</td><td class="num">%s</td>'
+               '<td class="num">%.2f</td><td class="num">%.2f</td>'%(
+                r['no'],r['holder'],format(round(r['sqft'],2),','),r['sqm'],r['factor']))
+        if asr: body+='<td class="num strong">%s</td>'%inr(r['asr_value'])
+        if mkt: body+='<td class="num">%s</td>'%inr(r['mkt_value'])
+        body+='</tr>\n'
+    foot='<tr><td>एकूण</td><td>—</td><td class="num">%s</td><td class="num">%.2f</td><td class="num">—</td>'%(
+        format(round(tot['sqft'],2),','),tot['sqm'])
+    if asr: foot+='<td class="num">%s</td>'%inr(tot['asr'])
+    if mkt: foot+='<td class="num">%s</td>'%inr(tot['mkt'])
+    foot+='</tr>'
+    common=cfg.get('common_parcel'); extra=''
+    if common:
+        cr=next((r for r in rows if r['no']==common),None)
+        shares=cfg.get('common_shares') or [r['no'] for r in rows if r['no']!=common]
+        if cr and cr.get('asr_value'):
+            extra=('<p class="sub">सामाईक %s चे शासकीय मूल्य ₹%s — %d धारकांत समान वाटल्यास '
+                   'प्रत्येकी <strong>₹%s</strong>.</p>'%(common,inr(cr['asr_value']),len(shares),
+                                                          inr(cr['asr_value']/len(shares))))
+    src=[]
+    if asr: src.append('शासकीय दर ₹%s/चौ.मी. — %s'%(inr(asr),cfg.get('asr_source') or 'स्रोत नोंदवलेला नाही'))
+    if mkt: src.append('बाजार दर ₹%s/चौ.फूट — %s'%(inr(mkt),cfg.get('market_source') or 'स्रोत नोंदवलेला नाही'))
+    return ("""<section>
+ <div class="sec-head">
+  <h2>मूल्यांकन (सूचक)</h2>
+  <p class="sub">%s</p>
+ </div>
+ <div class="tbl-wrap"><table>
+  <caption>पोटहिस्सानिहाय मूल्य</caption>
+  <thead><tr><th>सि.स.नं.</th><th>धारक</th><th class="num">क्षेत्र (चौ.फूट)</th>
+   <th class="num">चौ.मी.</th><th class="num">घटक</th>%s</tr></thead>
+  <tbody>%s</tbody>
+  <tfoot>%s</tfoot>
+ </table></div>
+ %s
+ <p class="sub"><strong>अस्वीकरण:</strong> हे मूल्य सूचक (indicative) आहे. मुद्रांक शुल्कासाठीचे
+ अधिकृत बाजारमूल्य नोंदणी व मुद्रांक विभागाच्या दर तक्त्यानुसार व शासनमान्य मूल्यांकनकर्त्याकडूनच ठरते.</p>
+</section>
+"""%(' · '.join(src),cols,body,foot,extra))
+
+VALUATION=valuation_section()
 
 summary_rows='\n'.join(
  f'<tr><td class="code"><span class="swatch sw-{TINT[no]}" aria-hidden="true"></span>{no}</td>'
@@ -341,6 +420,8 @@ a{{color:var(--accent2)}}
   </tbody>
  </table></div>
 </section>
+
+{VALUATION}
 
 <section>
  <div class="sec-head">
